@@ -8,14 +8,8 @@
 #include "Record.h"
 #include <iostream>
 
-Record::Record() {
-	// TODO Auto-generated constructor stub
 
-}
 
-Record::~Record() {
-	// TODO Auto-generated destructor stub
-}
 
 //void Record::addField(Field f){
 //	this->record_.push_back(f);

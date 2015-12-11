@@ -9,16 +9,19 @@
 #define SRC_FIELDCONFIG_H_
 #include <string>
 #include <iostream>
+#include <memory>
 
 enum class Data_type {
-	VAR, INT, FLOAT, TIME
+	VAR=1, INT=2, FLOAT=3, TIME=4,UNKNOWN=6
 };
 
 class FieldConfig {
 	std::string name_;
 	Data_type dtype_;
+	friend std::ostream & operator<<(std::ostream &os, const FieldConfig &fc);
 public:
 	FieldConfig();
+	FieldConfig(std::string name, std::string type);
 	~FieldConfig();
 	std::string getName() const;
 	void setName(std::string pp);

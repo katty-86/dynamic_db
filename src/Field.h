@@ -9,17 +9,16 @@
 #define FIELD_H_
 #include <string>
 
+template <class T>
 class Field {
 protected:
-	std::string name_;
-	std::string type_;
-	friend std::ostream & operator<<(std::ostream &os, const Field &inf);
+	T value;
 public:
 	Field();
-	Field(std::string n);
+	Field(T v);
 	~Field();
-	std::string getName() const;
-	void setName(std::string pp);
+	std::string getValue() const;
+	void setValue(T v);
 };
 
 #endif /* FIELD_H_ */
