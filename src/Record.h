@@ -5,22 +5,22 @@
  *      Author: kaky
  */
 
-#ifndef RECORD_H_
-#define RECORD_H_
-#include <list>
-#include "Field.h"
-#include "Record.h"
 
-template <class T>
+#include <list>
+
+#include <memory>
+#include <vector>
+#include <iostream>
+#include "Field.h"
+#include "FieldConfig.h"
+
 class Record {
-	std::list<Field<T>> record_;
-	//Field<int> t;
+	std::list<std::shared_ptr<Any_Field>> record_;
 	friend std::ostream & operator<<(std::ostream &os, const Record &r);
 public:
 	Record();
 	~Record();
-	//void addField(Field<T> f){record_.push_back(f)};
-	//void addRecord(std::string name, std::string type);
+	void addRecord(std::vector <FieldConfig> &t);
 };
 
-#endif /* RECORD_H_ */
+

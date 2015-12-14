@@ -7,7 +7,7 @@
 
 #include "FieldConfig.h"
 
-FieldConfig::FieldConfig() {
+FieldConfig::FieldConfig():name_(""), dtype_(Data_type::UNKNOWN) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -39,6 +39,10 @@ void FieldConfig::setName(std::string pp) {
 	this->name_ = pp;
 }
 
+Data_type FieldConfig::getType() const{
+	return this->dtype_;
+}
+
 std::ostream & operator<<(std::ostream &os, const FieldConfig &fc) {
 		std::string type;
 		if (fc.dtype_ ==  Data_type::INT) {
@@ -54,5 +58,5 @@ std::ostream & operator<<(std::ostream &os, const FieldConfig &fc) {
 			type= "unknown";
 		}
 
-        return os <<""<<fc.name_ <<" "<<type;
+        return os <<""<<fc.name_ <<"["<<type<<"] ";
 }

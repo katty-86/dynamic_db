@@ -25,6 +25,7 @@ public:
 	~FieldConfig();
 	std::string getName() const;
 	void setName(std::string pp);
+	Data_type getType() const;
 };
 
 #endif /* SRC_FIELDCONFIG_H_ */

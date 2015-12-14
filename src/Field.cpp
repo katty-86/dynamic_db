@@ -7,7 +7,3 @@
 
 #include "Field.h"
 
-
-
-//std::string getValue() const;
-//void setValue(T v);

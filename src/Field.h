@@ -5,20 +5,44 @@
  *      Author: kaky
  */
 
-#ifndef FIELD_H_
-#define FIELD_H_
 #include <string>
+#include <iostream>
+#include <sstream>
 
-template <class T>
-class Field {
-protected:
-	T value;
+class Any_Field {
 public:
-	Field();
-	Field(T v);
-	~Field();
-	std::string getValue() const;
-	void setValue(T v);
+	virtual ~Any_Field() {
+	}
+	virtual void print() = 0;
+	virtual std::string getValueString() = 0;
+	//virtual void setValue() = 0;
 };
 
-#endif /* FIELD_H_ */
+template<class T>
+class Field: public Any_Field {
+public:
+	Field(const T& value) :
+			value_(value) {
+	}
+
+	virtual void print() {
+		std::cout << value_ << '\n';
+	}
+
+	void setValue(const T& value){
+		this->value_=value;
+	}
+
+	T getValue(){
+			return this->value_;
+		}
+
+	std::string getValueString(){
+		std::ostringstream oss;
+		oss << this->value_;
+		return oss.str();
+		}
+private:
+	T value_;
+};
+

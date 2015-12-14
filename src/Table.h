@@ -13,22 +13,22 @@
 #include <iostream>
 #include "Record.h"
 #include "FieldConfig.h"
+#include <memory>
 
 class Table {
 	std::string name_;
-	int fieldCounter_;
 	std::vector<FieldConfig> vec_config_;
-	std::list<Record> list_data_;
+	std::list<std::shared_ptr<Record>> list_data_;
+
 public:
 	Table();
 	~Table();
 	std::string getName() const;
 	void setName(std::string pp);
-	int getFieldCounter() const;
-	void setFieldCounter(int pp);
 	void addConfigField(std::string type, std::string name);
-	void addRecord();
+	void addRow();
 	void describeTable();
+	void printTable();
 
 };
 
