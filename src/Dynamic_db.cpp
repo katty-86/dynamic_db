@@ -39,8 +39,15 @@ int main() {
 			createTable(t);
 
 		} else if (choose == 'c') {
+			string filename;
+			cout<<"Set name of the file"<<endl;
+			cin>>filename;
+			t->save_data(*t, filename);
 
-		} else if (choose == 'g') {
+		} else if (choose == 'd') {
+			string filename;
+			cout<<"Set name of the file"<<endl;
+			cin>>filename;
 
 		} else if (choose == 'e') {
 			DMLMenu();

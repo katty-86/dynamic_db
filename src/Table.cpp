@@ -50,7 +50,7 @@ void Table::printTable() {
 	std::cout<<"\n";
 	for (auto it = this->list_data_.begin(); it != this->list_data_.end();
 			++it) {
-		std::cout << "" << **it << "\n";
+		std::cout << "" << *it << "\n";
 	}
 	std::cout<<std::endl;
 }
@@ -60,6 +60,19 @@ void Table::addRow(){
 	//Record r;
 	std::shared_ptr<Record> r = std::make_shared<Record>();
 	r->addRecord(this->vec_config_);
-	this->list_data_.push_back(r);
+	this->list_data_.push_back(*r);
 
+}
+
+void Table::save_data(const Table &s, std::string filename) {
+	std::ofstream ofs(filename.c_str());
+	boost::archive::text_oarchive oa(ofs);
+	oa << s;
+}
+
+void Table::read_data(Table &s, std::string filename) {
+
+	std::ifstream ifs(filename.c_str());
+	boost::archive::text_iarchive ia(ifs);
+	ia >> s;
 }
