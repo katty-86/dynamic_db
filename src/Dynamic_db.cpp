@@ -12,7 +12,8 @@
 //#include "Field.h"
 //#include "Record.h"
 #include "Table.h"
-
+#include "Serializer.h"
+#include <algorithm>
 using namespace std;
 //
 //struct Table_config_t {
@@ -27,6 +28,7 @@ using namespace std;
 void displayManu();
 void DMLMenu();
 void createTable(shared_ptr<Table> &t);
+const std::string acceptable_type = ("INT VAR TIME FLOAT");
 
 int main() {
 
@@ -40,17 +42,22 @@ int main() {
 
 		} else if (choose == 'c') {
 			string filename;
-			cout<<"Set name of the file"<<endl;
-			cin>>filename;
-			t->save_data(*t, filename);
+			cout << "Set name of the file" << endl;
+			cin >> filename;
+			Serializer helper;
+			helper.writaData(t, filename);
 
 		} else if (choose == 'd') {
+			t->clearTable();
 			string filename;
-			cout<<"Set name of the file"<<endl;
-			cin>>filename;
+			cout << "Set name of the file" << endl;
+			cin >> filename;
+			Serializer helper;
+			helper.readData(t, filename);
 
 		} else if (choose == 'e') {
 			DMLMenu();
+			cin >> choose;
 			if (choose == 'i') {
 				cout << "How many rows you want to add" << endl;
 				int rows;
@@ -60,7 +67,7 @@ int main() {
 				}
 				t->printTable();
 			} else if (choose == 's') {
-
+				t->printTable();
 			} else {
 
 			}
@@ -97,24 +104,29 @@ void DMLMenu() {
 	cout << ">";
 }
 
-void createTable(shared_ptr<Table> &t){
+void createTable(shared_ptr<Table> &t) {
 
 	int n;
-			string name;
-			cout << "Set name of table" << endl;
-			cin >> name;
-			t->setName(name);
-			cout << "how many field do you want to store in table" << endl;
-			cin >> n;
-			cout << "creating tables...." << endl;
-			for (int i = 0; i < n; i++) {
-				//checking function for type
-				string name, type;
-				cout << "type(VAR, INT, FLOAT, TIME): ";
-				cin >> type;
-				cout << "name: ";
-				cin >> name;
-				t->addConfigField(type, name);
-			}
+	string name;
+	cout << "Set name of table" << endl;
+	cin >> name;
+	t->setName(name);
+	cout << "how many field do you want to store in table" << endl;
+	cin >> n;
+	cout << "creating tables...." << endl;
+	for (int i = 0; i < n; i++) {
+		//checking function for type
+		string name, type;
+		do {
+			cout << "Write type from ["<<acceptable_type<<"]"<<endl;
+			cin >> type;
+			std::transform(type.begin(), type.end(), type.begin(), ::toupper);
+		} while (acceptable_type.find(type)==std::string::npos);
+
+		cout << "Write name: ";
+		cin >> name;
+		std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+		t->addConfigField(type, name);
+	}
 }
 

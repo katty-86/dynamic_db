@@ -15,23 +15,24 @@
 #include "Record.h"
 #include "FieldConfig.h"
 #include <memory>
-#include <boost/serialization/list.hpp>
-#include <boost/serialization/vector.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+
+//#include <boost/serialization/list.hpp>
+//#include <boost/serialization/vector.hpp>
+//#include <boost/archive/text_iarchive.hpp>
+//#include <boost/archive/text_oarchive.hpp>
 
 class Table {
 	std::string name_;
 	std::vector<FieldConfig> vec_config_;
 	std::list<Record> list_data_;
-	friend class boost::serialization::access;
-	template<class Archive>
+	/*friend class boost::serialization::access;
+	 template<class Archive>
 	 void serialize(Archive &ar, const unsigned int version)
-	    {
-	        ar & name_;
-	        ar & vec_config_;
-	        ar & list_data_;
-	    }
+	 {
+	 ar & name_;
+	 ar & vec_config_;
+	 ar & list_data_;
+	 }*/
 
 public:
 	Table();
@@ -40,10 +41,16 @@ public:
 	void setName(std::string pp);
 	void addConfigField(std::string type, std::string name);
 	void addRow();
+	void addRow(std::string s);
 	void describeTable();
 	void printTable();
 	void read_data(Table &s, std::string filename);
 	void save_data(const Table &s, std::string filename);
+	std::vector<FieldConfig> getVec_config();
+	std::list<Record> getList_data();
+	std::string getName();
+	void clearTable();
+
 
 	//not implemented
 	//int delete_row();

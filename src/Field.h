@@ -9,8 +9,8 @@
 #include <iostream>
 #include <sstream>
 
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
+//#include <boost/archive/text_oarchive.hpp>
+///#include <boost/archive/text_iarchive.hpp>
 
 class Any_Field {
 public:
@@ -18,12 +18,12 @@ public:
 	}
 	virtual void print() = 0;
 	virtual std::string getValueString() = 0;
-	template<class Archive>
-	void serialize(Archive &ar, const unsigned int version) {
-	}
+	/*template<class Archive>
+	 void serialize(Archive &ar, const unsigned int version) {
+	 }*/
 	//virtual void setValue() = 0;
 };
-
+//BOOST_SERIALIZATION_ASSUME_ABSTRACT(Any_Field)
 template<class T>
 class Field: public Any_Field {
 public:
@@ -50,11 +50,11 @@ public:
 	}
 private:
 	T value_;
-	friend class boost::serialization::access;
-	template<class Archive>
-	void serialize(Archive & ar, const unsigned int version) {
-		ar & value_;
-	}
+	/*friend class boost::serialization::access;
+	 template<class Archive>
+	 void serialize(Archive & ar, const unsigned int version) {
+	 ar & value_;
+	 }*/
 	friend std::ostream & operator<<(std::ostream &os, const Field &f) {
 		std::ostringstream oss;
 		oss << f.value_;
