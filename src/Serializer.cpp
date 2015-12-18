@@ -53,9 +53,9 @@ void Serializer::readData(std::shared_ptr<Table> t, std::string filename) {
 			name = line.substr(0, pos);
 			line.erase(0, pos + 1);
 			pos = line.find(']: ');
-			type = line.substr(0, pos-2);
+			type = line.substr(0, pos - 2);
 			line.erase(0, pos + 1);
-			t->addConfigField(type,name);
+			t->addConfigField(type, name);
 		} while (line.size() != 1);
 		while (getline(myfile, line)) {
 			t->addRow(line);

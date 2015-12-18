@@ -15,24 +15,12 @@
 #include "Record.h"
 #include "FieldConfig.h"
 #include <memory>
-
-//#include <boost/serialization/list.hpp>
-//#include <boost/serialization/vector.hpp>
-//#include <boost/archive/text_iarchive.hpp>
-//#include <boost/archive/text_oarchive.hpp>
+#include <iterator>
 
 class Table {
 	std::string name_;
 	std::vector<FieldConfig> vec_config_;
 	std::list<Record> list_data_;
-	/*friend class boost::serialization::access;
-	 template<class Archive>
-	 void serialize(Archive &ar, const unsigned int version)
-	 {
-	 ar & name_;
-	 ar & vec_config_;
-	 ar & list_data_;
-	 }*/
 
 public:
 	Table();
@@ -50,10 +38,9 @@ public:
 	std::list<Record> getList_data();
 	std::string getName();
 	void clearTable();
-
-
-	//not implemented
-	//int delete_row();
+	//select * from nazwa_tabeli where
+	std::list<std::string>::iterator findRow(std::string key,
+			std::string value);
 
 };
 

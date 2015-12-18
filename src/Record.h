@@ -21,7 +21,7 @@
 #include "Utils.h"
 
 class Record {
-	std::list<std::shared_ptr<Any_Field>> record_;
+	std::vector<std::shared_ptr<Any_Field>> record_;
 	friend std::ostream & operator<<(std::ostream &os, const Record &r);
 	/*friend class boost::serialization::access;
 	 template<class Archive>
@@ -35,5 +35,6 @@ public:
 	~Record();
 	void addRecord(std::vector<FieldConfig> &t);
 	void addRecord(std::vector<FieldConfig> &t, std::string s);
+	std::vector<std::shared_ptr<Any_Field>> getRecord();
 };
 

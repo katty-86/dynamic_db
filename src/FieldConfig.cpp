@@ -44,39 +44,39 @@ Data_type FieldConfig::getType() const {
 	return this->dtype_;
 }
 
-std::string FieldConfig::getTypeString(){
-	    std::string type;
-		if (this->dtype_ == Data_type::INT) {
-			type = "INT";
-		} else if (this->dtype_ == Data_type::VAR) {
-			type = "VAR";
-		} else if (this->dtype_ == Data_type::FLOAT) {
-			type = "FLOAT";
-		} else if (this->dtype_ == Data_type::TIME) {
-			type = "TIME";
-		} else {
-			type = "unknown";
-		}
-		return type;
+std::string FieldConfig::getTypeString() {
+	std::string type;
+	if (this->dtype_ == Data_type::INT) {
+		type = "INT";
+	} else if (this->dtype_ == Data_type::VAR) {
+		type = "VAR";
+	} else if (this->dtype_ == Data_type::FLOAT) {
+		type = "FLOAT";
+	} else if (this->dtype_ == Data_type::TIME) {
+		type = "TIME";
+	} else {
+		type = "unknown";
+	}
+	return type;
 }
 
-std::string FieldConfig::getNameType(){
-	    std::string type=this->name_;
-	    type.append("[");
-		if (dtype_ == Data_type::INT) {
-			type.append("INT");
-		} else if (dtype_ == Data_type::VAR) {
-			type.append("VAR");
-		} else if (dtype_ == Data_type::FLOAT) {
-			type.append("FLOAT");
-		} else if (dtype_ == Data_type::TIME) {
-			type.append("TIME");
-		} else {
-			type.append("unknown");
-		}
-		type.append("]");
+std::string FieldConfig::getNameType() {
+	std::string type = this->name_;
+	type.append("[");
+	if (dtype_ == Data_type::INT) {
+		type.append("INT");
+	} else if (dtype_ == Data_type::VAR) {
+		type.append("VAR");
+	} else if (dtype_ == Data_type::FLOAT) {
+		type.append("FLOAT");
+	} else if (dtype_ == Data_type::TIME) {
+		type.append("TIME");
+	} else {
+		type.append("unknown");
+	}
+	type.append("]");
 
-		return type;
+	return type;
 }
 
 std::ostream & operator<<(std::ostream &os, const FieldConfig &fc) {
@@ -95,5 +95,4 @@ std::ostream & operator<<(std::ostream &os, const FieldConfig &fc) {
 
 	return os << "" << fc.name_ << "[" << type << "]:";
 }
-
 

@@ -21,12 +21,7 @@ class FieldConfig {
 	std::string name_;
 	Data_type dtype_;
 	friend std::ostream & operator<<(std::ostream &os, const FieldConfig &fc);
-	/*friend class boost::serialization::access;
-	 template<class Archive>
-	 void serialize(Archive & ar, const unsigned int version) {
-	 ar & name_;
-	 ar & dtype_;
-	 }*/
+
 public:
 	FieldConfig();
 	FieldConfig(std::string name, std::string type);

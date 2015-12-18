@@ -6,5 +6,7 @@
  */
 #include <iostream>
 #include <string>
+#include <regex>
 
 int readIntger(std::string s);
+std::string readString(std::string s);

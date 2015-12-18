@@ -9,22 +9,11 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-//#include "Field.h"
-//#include "Record.h"
 #include "Table.h"
 #include "Serializer.h"
 #include <algorithm>
 using namespace std;
-//
-//struct Table_config_t {
-//	std::string name;
-//	int count;
-//};
-//
-//struct Row_config_t {
-//	std::string name;
-//	std::string type;
-//};
+
 void displayManu();
 void DMLMenu();
 void createTable(shared_ptr<Table> &t);
@@ -68,7 +57,13 @@ int main() {
 				t->printTable();
 			} else if (choose == 's') {
 				t->printTable();
-			} else {
+			} else if (choose == 'd') {
+				t->findRow("NAZWISKO", "krzys");
+			} else if (choose == 'u') {
+				t->findRow("imieiiii", "krzys");
+			}
+
+			else {
 
 			}
 
@@ -118,10 +113,10 @@ void createTable(shared_ptr<Table> &t) {
 		//checking function for type
 		string name, type;
 		do {
-			cout << "Write type from ["<<acceptable_type<<"]"<<endl;
+			cout << "Write type from [" << acceptable_type << "]" << endl;
 			cin >> type;
 			std::transform(type.begin(), type.end(), type.begin(), ::toupper);
-		} while (acceptable_type.find(type)==std::string::npos);
+		} while (acceptable_type.find(type) == std::string::npos);
 
 		cout << "Write name: ";
 		cin >> name;
