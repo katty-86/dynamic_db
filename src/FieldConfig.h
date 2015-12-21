@@ -10,8 +10,6 @@
 #include <string>
 #include <iostream>
 #include <memory>
-//#include <boost/archive/text_oarchive.hpp>
-//#include <boost/archive/text_iarchive.hpp>
 
 enum class Data_type {
 	VAR = 1, INT = 2, FLOAT = 3, TIME = 4, UNKNOWN = 6
@@ -29,8 +27,9 @@ public:
 	std::string getName() const;
 	void setName(std::string pp);
 	Data_type getType() const;
-	std::string getTypeString();
-	std::string getNameType();
+	std::string getTypeString() const;
+	std::string getNameType() const;
+	int getPosition() const;
 };
 
 #endif /* SRC_FIELDCONFIG_H_ */

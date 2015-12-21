@@ -43,6 +43,7 @@ void Serializer::readData(std::shared_ptr<Table> t, std::string filename) {
 		getline(myfile, line);
 		int pos = line.find('|');
 		std::string name = line.substr(0, pos);
+		std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 		t->setName(name);
 		line.erase(0, pos + 1);
 		pos = line.find('|');
@@ -55,9 +56,12 @@ void Serializer::readData(std::shared_ptr<Table> t, std::string filename) {
 			pos = line.find(']: ');
 			type = line.substr(0, pos - 2);
 			line.erase(0, pos + 1);
+			std::transform(type.begin(), type.end(), type.begin(), ::toupper);
+			std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 			t->addConfigField(type, name);
 		} while (line.size() != 1);
 		while (getline(myfile, line)) {
+			std::transform(line.begin(), line.end(), line.begin(), ::toupper);
 			t->addRow(line);
 
 		}

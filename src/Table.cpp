@@ -54,8 +54,6 @@ void Table::printTable() {
 }
 
 void Table::addRow() {
-
-	//Record r;
 	std::shared_ptr<Record> r = std::make_shared<Record>();
 	r->addRecord(this->vec_config_);
 	this->list_data_.push_back(*r);
@@ -63,7 +61,6 @@ void Table::addRow() {
 }
 
 void Table::addRow(std::string s) {
-	//Record r;
 	std::shared_ptr<Record> r = std::make_shared<Record>();
 	r->addRecord(this->vec_config_, s);
 	this->list_data_.push_back(*r);
@@ -87,26 +84,55 @@ void Table::clearTable() {
 	this->name_ = "";
 }
 
-std::list<std::string>::iterator Table::findRow(std::string key,
+std::list<Record> Table::findMatchingRow(std::string key,
 		std::string value) {
 	std::transform(key.begin(), key.end(), key.begin(), ::toupper);
 	std::transform(value.begin(), value.end(), value.begin(), ::toupper);
-	std::list<std::string>::iterator ret_it;
-	//find if key exist in REcodConfig
-	 auto it = std::find_if(this->vec_config_.begin(), vec_config_.end(),[&key]( FieldConfig &c) {return c.getName()==key;});
-	if(it!=vec_config_.end()){
-		std::cout<<"nie koniec"<<std::endl;
-		int pos=std::distance(vec_config_.begin(), it);
-		for(auto i=this->list_data_.begin(); i!=this->list_data_.end();++i){
-			std::cout<< "test"<<i->getRecord()<<std::endl;
-		}
-	}
-	else{
-		std::cout<<"not correct key"<<std::endl;
-	}
-	//std::cout << "----"<<pos<<"-------"<< vec_config_.end()<< std::endl;
-	//find if value exist
+	std::list<Record> list_result;
+	auto ir_rec = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+			[&key]( FieldConfig &c) {return c.getName()==key;});
+	if (ir_rec != vec_config_.end()) {
+		int pos = std::distance(vec_config_.begin(), ir_rec);
+		for (auto it_list = this->list_data_.begin(); it_list != this->list_data_.end();
+				++it_list) {
+			if(((*it_list).compareRecord(value,  pos))==true){
+				list_result.push_back(*it_list);
+			}
 
-	return ret_it;
+		}
+	} else {
+		std::cout << "not correct key" << std::endl;
+	}
+
+	return list_result;
+}
+
+int Table::countMatchingRow(std::string key,
+		std::string value){
+	std::transform(key.begin(), key.end(), key.begin(), ::toupper);
+	std::transform(value.begin(), value.end(), value.begin(), ::toupper);
+	int count=0;
+	auto ir_rec = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+			[&key]( FieldConfig &c) {return c.getName()==key;});
+	if (ir_rec != vec_config_.end()) {
+		int pos = std::distance(vec_config_.begin(), ir_rec);
+		for (auto it_list = this->list_data_.begin(); it_list != this->list_data_.end();
+				++it_list) {
+			if(((*it_list).compareRecord(value,  pos))==true){
+				count++;
+			}
+
+		}
+	} else {
+		std::cout << "not correct key" << std::endl;
+	}
+
+	return count;
+}
+bool Table::checkIfListDataEmpty() {
+	return this->list_data_.empty();
+}
+bool Table::checkIfVecConfigEmpty() {
+	return this->vec_config_.empty();
 }
 

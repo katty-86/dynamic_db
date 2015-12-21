@@ -39,8 +39,12 @@ public:
 	std::string getName();
 	void clearTable();
 	//select * from nazwa_tabeli where
-	std::list<std::string>::iterator findRow(std::string key,
+	std::list<Record> findMatchingRow(std::string key,
 			std::string value);
+	int countMatchingRow(std::string key,
+			std::string value);
+	bool checkIfListDataEmpty();
+	bool checkIfVecConfigEmpty();
 
 };
 

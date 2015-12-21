@@ -10,3 +10,4 @@
 
 int readIntger(std::string s);
 std::string readString(std::string s);
+float readFloat(std::string s);

@@ -16,13 +16,12 @@ Record::~Record() {
 	// TODO Auto-generated destructor stub
 }
 
-std::vector<std::shared_ptr<Any_Field>> Record::getRecord(){
+std::vector<std::shared_ptr<Any_Field>> Record::getRecord() {
 	return this->record_;
 }
 void Record::addRecord(std::vector<FieldConfig> &t) {
 
 	for (auto it = t.begin(); it != t.end(); ++it) {
-		//std::cout << *it << std::endl;
 		if ((*it).getType() == Data_type::INT) {
 			int value = readIntger((*it).getName());
 			std::shared_ptr<Any_Field> tmp = std::make_shared<Field<int>>(
@@ -91,5 +90,15 @@ std::ostream & operator<<(std::ostream &os, const Record &r) {
 		os << " " << (**it).getValueString() << ";";
 	}
 	return os;
+}
+
+bool Record::compareRecord(std::string value, int distance) {
+	bool flag = false;
+	auto it = this->record_[distance];
+	std::cout << value << " " << it->getValueString();
+	if ((value.compare(it->getValueString())) == 0) {
+		flag = true;
+	}
+	return flag;
 }
 

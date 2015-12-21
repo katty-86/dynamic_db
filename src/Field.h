@@ -50,11 +50,6 @@ public:
 	}
 private:
 	T value_;
-	/*friend class boost::serialization::access;
-	 template<class Archive>
-	 void serialize(Archive & ar, const unsigned int version) {
-	 ar & value_;
-	 }*/
 	friend std::ostream & operator<<(std::ostream &os, const Field &f) {
 		std::ostringstream oss;
 		oss << f.value_;
