@@ -72,7 +72,6 @@ void Record::addRecord(std::vector<FieldConfig> &t, std::string s) {
 			this->record_.push_back(tmp);
 		} else if ((*it).getType() == Data_type::TIME) {
 			long value = std::atol(s_value.c_str());
-			std::cin >> value;
 			std::shared_ptr<Any_Field> tmp = std::make_shared<Field<long>>(
 					value);
 			this->record_.push_back(tmp);
@@ -95,10 +94,30 @@ std::ostream & operator<<(std::ostream &os, const Record &r) {
 bool Record::compareRecord(std::string value, int distance) {
 	bool flag = false;
 	auto it = this->record_[distance];
-	std::cout << value << " " << it->getValueString();
 	if ((value.compare(it->getValueString())) == 0) {
 		flag = true;
 	}
 	return flag;
 }
 
+void Record::updateRecord(std::string s_value, int distance, Data_type dt) {
+
+	auto it = &this->record_[distance];
+	if (dt == Data_type::INT) {
+		int value = std::atoi(s_value.c_str());
+		it->reset(new Field<int>(value));
+	} else if (dt == Data_type::VAR) {
+		it->reset(new Field<std::string>(s_value));
+	} else if (dt == Data_type::FLOAT) {
+		float value = std::atof(s_value.c_str());
+		it->reset(new Field<float>(value));
+	} else if (dt == Data_type::TIME) {
+		long value = std::atol(s_value.c_str());
+		it->reset(new Field<long>(value));
+	} else {
+
+	}
+	for (auto it = this->record_.begin(); it != this->record_.end(); ++it) {
+		std::cout << "* " << (**it).getValueString() << ";";
+	}
+}

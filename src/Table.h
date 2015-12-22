@@ -39,12 +39,15 @@ public:
 	std::string getName();
 	void clearTable();
 	//select * from nazwa_tabeli where
-	std::list<Record> findMatchingRow(std::string key,
-			std::string value);
-	int countMatchingRow(std::string key,
-			std::string value);
+	std::list<Record> findMatchingRow(
+			std::vector<std::pair<std::string, std::string>> v);
+	int countMatchingRow(std::vector<std::pair<std::string, std::string>> v);
 	bool checkIfListDataEmpty();
 	bool checkIfVecConfigEmpty();
+	int sizeListData();
+	int removeRowFromDB(std::vector<std::pair<std::string, std::string>> v);
+	int updateRowFromDB(std::vector<std::pair<std::string, std::string>> update,
+			std::vector<std::pair<std::string, std::string>> condition);
 
 };
 

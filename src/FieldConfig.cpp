@@ -44,7 +44,7 @@ Data_type FieldConfig::getType() const {
 	return this->dtype_;
 }
 
-std::string FieldConfig::getTypeString() const{
+std::string FieldConfig::getTypeString() const {
 	std::string type;
 	if (this->dtype_ == Data_type::INT) {
 		type = "INT";
@@ -60,7 +60,7 @@ std::string FieldConfig::getTypeString() const{
 	return type;
 }
 
-std::string FieldConfig::getNameType() const{
+std::string FieldConfig::getNameType() const {
 	std::string type = this->name_;
 	type.append("[");
 	if (dtype_ == Data_type::INT) {
