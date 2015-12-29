@@ -41,13 +41,17 @@ public:
 	//select * from nazwa_tabeli where
 	std::list<Record> findMatchingRow(
 			std::vector<std::pair<std::string, std::string>> v);
+	std::list<std::string> findMatchingRowAccordingExpression(std::vector<std::pair<std::string, std::string>> e,
+				std::vector<std::pair<std::string, std::string>> v);
 	int countMatchingRow(std::vector<std::pair<std::string, std::string>> v);
 	bool checkIfListDataEmpty();
 	bool checkIfVecConfigEmpty();
 	int sizeListData();
 	int removeRowFromDB(std::vector<std::pair<std::string, std::string>> v);
+	int removeAllFromDB();
 	int updateRowFromDB(std::vector<std::pair<std::string, std::string>> update,
 			std::vector<std::pair<std::string, std::string>> condition);
+	int updateAllFromDB(std::vector<std::pair<std::string, std::string>> update);
 
 };
 

@@ -184,15 +184,15 @@ int Table::updateRowFromDB(
 			&& (it_condition != vec_config_.end())) {
 		int pos_update = std::distance(vec_config_.begin(), it_update);
 		int pos_condition = std::distance(vec_config_.begin(), it_condition);
-		std::cout << "tutaj" << std::endl;
+	//	std::cout << "tutaj" << std::endl;
 		for (auto it_list = this->list_data_.begin();
 				it_list != this->list_data_.end(); ++it_list) {
 			if (((*it_list).compareRecord(condition_value, pos_condition))
 					== true) {
-				std::cout << "tutaj!" << std::endl;
+			//	std::cout << "tutaj!" << std::endl;
 				(*it_list).updateRecord(update_value, pos_update,
 						(*it_update).getType());
-				std::cout << "\n->" << *it_list << "\n";
+			///	std::cout << "\n->" << *it_list << "\n";
 				count++;
 			}
 
@@ -210,6 +210,35 @@ int Table::updateRowFromDB(
 	return count;
 }
 
+int Table::updateAllFromDB(
+		std::vector<std::pair<std::string, std::string>> update) {
+	int count = 0;
+
+	std::string update_key = update[0].first;
+	std::string update_value = update[0].second;
+
+	auto it_update = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+			[&update_key]( FieldConfig &c) {return c.getName()==update_key;});
+
+	if (it_update != vec_config_.end()) {
+		int pos_update = std::distance(vec_config_.begin(), it_update);
+		//std::cout << "tutaj" << std::endl;
+		for (auto it_list = this->list_data_.begin();
+				it_list != this->list_data_.end(); ++it_list) {
+			//std::cout << "tutaj!" << std::endl;
+			(*it_list).updateRecord(update_value, pos_update,
+					(*it_update).getType());
+			//std::cout << "\n->" << *it_list << "\n";
+			count++;
+
+		}
+	} else {
+		std::cout << "Incorrect key in update statement" << std::endl;
+	}
+
+	return count;
+}
+
 bool Table::checkIfListDataEmpty() {
 	return this->list_data_.empty();
 }
@@ -219,4 +248,15 @@ bool Table::checkIfVecConfigEmpty() {
 
 int Table::sizeListData() {
 	return this->list_data_.size();
+}
+
+int Table::removeAllFromDB() {
+	int list_data_size = this->list_data_.size();
+	this->list_data_.clear();
+	return list_data_size;
+}
+std::list<std::string> Table::findMatchingRowAccordingExpression(
+		std::vector<std::pair<std::string, std::string>> e,
+		std::vector<std::pair<std::string, std::string>> v) {
+
 }

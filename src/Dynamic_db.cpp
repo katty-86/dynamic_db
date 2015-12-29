@@ -11,20 +11,21 @@
 #include <memory>
 #include "Table.h"
 #include "Serializer.h"
+#include "SQL.h"
 #include <algorithm>
 #include <regex>
 #include "Utils.h"
 using namespace std;
 
 void displayManu();
-void DMLMenu();
 void createTable(shared_ptr<Table> &t);
 void saveBDtoFile(shared_ptr<Table> &t);
 void readDBfromFile(shared_ptr<Table> &t);
 void insert(shared_ptr<Table> &t);
-void select(shared_ptr<Table> &t);
-void deleteRow(shared_ptr<Table> &t);
-void updateRow(shared_ptr<Table> &t);
+void insert(shared_ptr<Table> &t, SQL &s);
+void select(shared_ptr<Table> &t, SQL &s);
+void deleteRow(shared_ptr<Table> &t, SQL &s);
+void updateRow(shared_ptr<Table> &t, SQL &s);
 string acceptable_type = ("INT VAR TIME FLOAT");
 
 int main() {
@@ -34,40 +35,49 @@ int main() {
 	displayManu();
 	do {
 		cout << "\n >";
+		//cin.ignore(256, '\n');
 		getline(cin, choose);
-		cin >> choose;
+		//	cin >> choose;
 		if (choose == "b") {
 			createTable(t);
 		} else if (choose == "c") {
 			saveBDtoFile(t);
+			t->printTable();
 		} else if (choose == "d") {
 			readDBfromFile(t);
+			t->printTable();
 		} else if (choose == "h") {
 			displayManu();
-		} else if (choose == "e") {
-			if (!t->checkIfListDataEmpty()) {
-				DMLMenu();
-				cin >> choose;
-				if (choose == "i") {
-					insert(t);
-				} else if (choose == "s") {
-					select(t);
-				} else if (choose == "d") {
-					deleteRow(t);
-				} else if (choose == "u") {
-					updateRow(t);
-				}
-
-				else {
-
-				}
-			} else {
-				cout << "list is empty -task is not possible" << endl;
-			}
-
 		} else if (choose == "f") {
 			t->describeTable();
+		} else if (choose == "i") {
+			insert(t);
+		} else if (choose == "q") {
+			cout<<"QUIT"<<endl;
 		} else {
+			if (!t->checkIfListDataEmpty()) {
+				SQL sql;
+				if(sql.readSQL(choose, t->getName())==true){
+					if (sql.statement == 'I') {
+						sql.printAll();
+						insert(t, sql);
+					} else if (sql.statement == 'S') {
+						//sql.printAll();
+						select(t, sql);
+					} else if (sql.statement == 'D') {
+						sql.printAll();
+						deleteRow(t, sql);
+					} else if (sql.statement == 'U') {
+						sql.printAll();
+						updateRow(t, sql);
+					}
+				}
+				else {
+					cout << "Main: unsupported operation" << endl;
+				}
+			} else {
+				cout << "Main: list is empty -task is not possible" << endl;
+			}
 
 		}
 	} while (choose != "q");
@@ -86,14 +96,6 @@ void displayManu() {
 	cout << "q- quit\n";
 	cout << "h- print help\n";
 	cout << "\n\n or write dml statement for existing table \n";
-}
-
-void DMLMenu() {
-	cout << "i- insert \n";
-	cout << "d- delete\n";
-	cout << "u- update\n";
-	cout << "s- select\n";
-	cout << ">";
 }
 
 void createTable(shared_ptr<Table> &t) {
@@ -118,6 +120,7 @@ void createTable(shared_ptr<Table> &t) {
 
 		cout << "Write name: ";
 		cin >> name;
+		cin.ignore(256, '\n');
 		std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 		t->addConfigField(type, name);
 	}
@@ -127,6 +130,7 @@ void saveBDtoFile(shared_ptr<Table> &t) {
 	string filename;
 	cout << "Set name of the file" << endl;
 	cin >> filename;
+	cin.ignore(256, '\n');
 	Serializer helper;
 	helper.writaData(t, filename);
 }
@@ -135,145 +139,71 @@ void readDBfromFile(shared_ptr<Table> &t) {
 	string filename;
 	cout << "Set name of the file" << endl;
 	cin >> filename;
+	cin.ignore(256, '\n');
 	Serializer helper;
 	helper.readData(t, filename);
 }
 
 void insert(shared_ptr<Table> &t) {
-	cout << "How many rows you want to add" << endl;
-	int rows;
-	cin >> rows;
-	for (int i = 0; i < rows; ++i) {
-		t->addRow();
+	if (t->checkIfVecConfigEmpty() == false) {
+		cout << "How many rows you want to add" << endl;
+		int rows;
+		cin >> rows;
+		cin.ignore(256, '\n');
+		for (int i = 0; i < rows; ++i) {
+			t->addRow();
+		}
+		t->printTable();
+	} else {
+		cout << "Create table before inserting sth" << endl;
 	}
-	t->printTable();
 }
 
-void select(shared_ptr<Table> &t) {
+void insert(shared_ptr<Table> &t, SQL &s) {
+}
 
-	cout << "Write select" << endl;
-	string select_input;
-	cin.ignore(256, '\n');
-	getline(cin, select_input);
-	std::transform(select_input.begin(), select_input.end(),
-			select_input.begin(), ::toupper);
-	regex reg_input(
-			"select[[:s:]]*([[:print:]]*)[[:s:]]+from[[:s:]]*" + t->getName()
-					+ "([[:print:]]*)", regex_constants::icase);
-	smatch m;
-	bool flag = std::regex_search(select_input, m, reg_input);
-	if (flag == true) {
-		cout << "ok" << endl;
-		cout << m[1] << "=" << m[2] << "=" << m[3] << "=" << endl;
-		string str = m[2];
-		regex e("([[:w:]]+)[[:s:]]*=[[:s:]]*([[:w:]]+)");
-		sregex_iterator pos(str.cbegin(), str.cend(), e);
-		sregex_iterator end;
-		vector<pair<string, string>> v_pair_condition;
-		for (; pos != end; pos++) {
-			v_pair_condition.push_back(
-					pair<string, string>(pos->str(1), pos->str(2)));
-		}
+void select(shared_ptr<Table> &t, SQL &s) {
 
-		if (m[1] == "*") {
-			if (v_pair_condition.empty() == true) {
-				t->printTable();
-			} else {
-				list<Record> lis_result = t->findMatchingRow(v_pair_condition);
-				for (auto i = lis_result.begin(); i != lis_result.end(); ++i) {
-					cout << *i << endl;
-				}
-			}
-
-		} else if (m[1] == "COUNT(*)") {
-			if (v_pair_condition.empty() == true) {
-				cout << t->sizeListData() << endl;
-				;
-			} else {
-				cout << t->countMatchingRow(v_pair_condition) << endl;
-			}
+	if (s.flag_all == true) {
+		if (s.where_condition.empty() == true) {
+			t->printTable();
 		} else {
-			cout << "not supported:)" << endl;
-			//TODO check if param is ok
-			//specify column which can be printed
+			list<Record> lis_result = t->findMatchingRow(s.where_condition);
+			for (auto i = lis_result.begin(); i != lis_result.end(); ++i) {
+				cout << *i << endl;
+			}
 		}
 
+	} else if (s.flag_count == true) {
+		if (s.where_condition.empty() == true) {
+			cout << t->sizeListData() << endl;
+		} else {
+			cout << t->countMatchingRow(s.where_condition) << endl;
+		}
 	} else {
-		cout << "Incorrect statement" << endl;
+		cout << "not supported:)" << endl;
+		//cout<<t->findMatchingRowAccordingExpression(s.expression, s.where_condition);
+		//TODO check if param is ok
+		//specify column which can be printed
 	}
 
 }
 
-void deleteRow(shared_ptr<Table> &t) {
+void deleteRow(shared_ptr<Table> &t, SQL &s) {
 
-	cout << "Write delete" << endl;
-	string select_input;
-	cin.ignore(256, '\n');
-	getline(cin, select_input);
-	std::transform(select_input.begin(), select_input.end(),
-			select_input.begin(), ::toupper);
-	regex reg_input(
-			"delete[[:s:]]+from[[:s:]]+" + t->getName()
-					+ "[[:s:]]*([[:print:]]*)", regex_constants::icase);
-	smatch m;
-	bool flag = std::regex_search(select_input, m, reg_input);
-	cout << m[1] << "=" << endl;
-	if (flag == true) {
-		cout << "ok" << endl;
-		string str = m[1];
-		regex e("([[:w:]]+)[[:s:]]*=[[:s:]]*([[:w:]]+)");
-		sregex_iterator pos(str.cbegin(), str.cend(), e);
-		sregex_iterator end;
-		vector<pair<string, string>> v_pair_condition;
-		for (; pos != end; pos++) {
-			v_pair_condition.push_back(
-					pair<string, string>(pos->str(1), pos->str(2)));
-		}
-		t->removeRowFromDB(v_pair_condition);
+	if (s.where_condition.empty() == true) {
+		t->removeAllFromDB();
 	} else {
-		cout << "Incorrect statement" << endl;
+		t->removeRowFromDB(s.where_condition);
 	}
+
 }
 
-void updateRow(shared_ptr<Table> &t) {
+void updateRow(shared_ptr<Table> &t, SQL &s) {
 
-	cout << "Write update" << endl;
-	string select_input;
-	cin.ignore(256, '\n');
-	getline(cin, select_input);
-	std::transform(select_input.begin(), select_input.end(),
-			select_input.begin(), ::toupper);
-	regex reg_input(
-			"update[[:s:]]+" + t->getName()
-					+ "[[:s:]]+set([[:print:]]*)where([[:print:]]*)",
-			regex_constants::icase);
-	smatch m;
-	bool flag = std::regex_search(select_input, m, reg_input);
-	cout << m[1] << "=" << endl;
-	if (flag == true) {
-		cout << "ok" << endl;
-		string str = m[1];
-		regex e("([[:w:]]+)[[:s:]]*=[[:s:]]*([[:w:]]+)");
-		sregex_iterator pos_u(str.cbegin(), str.cend(), e);
-		sregex_iterator end_u;
-		vector<pair<string, string>> v_pair_update;
-		for (; pos_u != end_u; pos_u++) {
-			std::cout << pos_u->str(1) << " " << pos_u->str(2) << endl;
-			v_pair_update.push_back(
-					pair<string, string>(pos_u->str(1), pos_u->str(2)));
-		}
-		str = m[2];
-		e = "([[:w:]]+)[[:s:]]*=[[:s:]]*([[:w:]]+)";
-		sregex_iterator pos_c(str.cbegin(), str.cend(), e);
-		sregex_iterator end_c;
-		vector<pair<string, string>> v_pair_condition;
-		for (; pos_c != end_c; pos_c++) {
-			std::cout << pos_c->str(1) << " " << pos_c->str(2) << endl;
-			v_pair_condition.push_back(
-					pair<string, string>(pos_c->str(1), pos_c->str(2)));
-		}
-		t->updateRowFromDB(v_pair_update, v_pair_condition);
+	if (s.where_condition.empty() == true) {
+		t->updateAllFromDB(s.expression);
 	} else {
-		cout << "Incorrect statement" << endl;
+		t->updateRowFromDB(s.expression, s.where_condition);
 	}
 }

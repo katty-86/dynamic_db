@@ -12,14 +12,14 @@
 #define SQL_H_
 
 struct SQL {
-	std::string statement;
+	char statement;
 	bool flag_count=false;
 	bool flag_all=false;
 	std::vector<std::pair<std::string, std::string>> expression;
 	std::vector<std::pair<std::string, std::string>> where_condition;
 
 	void printAll();
-	void readSQL( std::string str, std::string name_of_table);
+	bool readSQL( std::string str, std::string name_of_table);
 	std::vector<std::pair<std::string, std::string>>  buidVector(std::string,std::string); //utils
 	std::vector<std::pair<std::string, std::string>> buildPairVector(
 			std::string str);
