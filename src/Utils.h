@@ -11,3 +11,6 @@
 int readIntger(std::string s);
 std::string readString(std::string s);
 float readFloat(std::string s);
+bool checkIfInt(std::string i);
+bool checkIfVar(std::string v);
+bool checkIfFloat(std::string f);

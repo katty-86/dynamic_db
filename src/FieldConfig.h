@@ -30,6 +30,7 @@ public:
 	std::string getTypeString() const;
 	std::string getNameType() const;
 	int getPosition() const;
+
 };
 
 #endif /* SRC_FIELDCONFIG_H_ */

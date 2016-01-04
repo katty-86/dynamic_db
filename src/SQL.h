@@ -13,8 +13,8 @@
 
 struct SQL {
 	char statement;
-	bool flag_count=false;
-	bool flag_all=false;
+	bool flag_count:1;//=false;
+	bool flag_all:1;//=false;
 	std::vector<std::pair<std::string, std::string>> expression;
 	std::vector<std::pair<std::string, std::string>> where_condition;
 

@@ -63,13 +63,28 @@ void Table::printTable() {
 
 }
 
+void Table::addRow(std::vector<std::pair<std::string, std::string>> expression) {
+	if(this->vec_config_.size()==expression.size()){
+		std::shared_ptr<Record> r = std::make_shared<Record>();
+			bool resultFlag =r->addRecord(this->vec_config_, expression);
+			if(resultFlag==true){
+				this->list_data_.push_back(*r);
+			}
+			else{
+				std::cout<<"Incorect type of params insert"<<std::endl;
+			}
+	}
+	else{
+		std::cout<<"Incorect amount of parms in insert"<<std::endl;
+	}
+}
+
 void Table::addRow() {
 	std::shared_ptr<Record> r = std::make_shared<Record>();
 	r->addRecord(this->vec_config_);
 	this->list_data_.push_back(*r);
 
 }
-
 void Table::addRow(std::string s) {
 	std::shared_ptr<Record> r = std::make_shared<Record>();
 	r->addRecord(this->vec_config_, s);
@@ -257,6 +272,6 @@ int Table::removeAllFromDB() {
 }
 std::list<std::string> Table::findMatchingRowAccordingExpression(
 		std::vector<std::pair<std::string, std::string>> e,
-		std::vector<std::pair<std::string, std::string>> v) {
+		std::vector<std::pair<std::string, std::string>> v) {}
 
-}
+

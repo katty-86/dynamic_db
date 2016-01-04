@@ -9,21 +9,14 @@
 #include <iostream>
 #include <sstream>
 
-//#include <boost/archive/text_oarchive.hpp>
-///#include <boost/archive/text_iarchive.hpp>
-
 class Any_Field {
 public:
 	virtual ~Any_Field() {
 	}
 	virtual void print() = 0;
 	virtual std::string getValueString() = 0;
-	/*template<class Archive>
-	 void serialize(Archive &ar, const unsigned int version) {
-	 }*/
-	//virtual void setValue() = 0;
 };
-//BOOST_SERIALIZATION_ASSUME_ABSTRACT(Any_Field)
+
 template<class T>
 class Field: public Any_Field {
 public:

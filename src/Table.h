@@ -30,6 +30,7 @@ public:
 	void addConfigField(std::string type, std::string name);
 	void addRow();
 	void addRow(std::string s);
+	void addRow(std::vector<std::pair<std::string, std::string>> expression);
 	void describeTable();
 	void printTable();
 	void read_data(Table &s, std::string filename);

@@ -32,6 +32,7 @@ Przewidziane funkcje:
 Wady:
 -zmienic shared_ptr na uniq_ptr gdzie sie da.
 -przemyslec logowanie - poziomy logowania??
+-w insercie mozna dowolna ilosc pul, nie sprawdzany jest typ i tez bedzie działać
 
 
 Testy -modułami

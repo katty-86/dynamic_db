@@ -35,9 +35,7 @@ int main() {
 	displayManu();
 	do {
 		cout << "\n >";
-		//cin.ignore(256, '\n');
 		getline(cin, choose);
-		//	cin >> choose;
 		if (choose == "b") {
 			createTable(t);
 		} else if (choose == "c") {
@@ -160,6 +158,8 @@ void insert(shared_ptr<Table> &t) {
 }
 
 void insert(shared_ptr<Table> &t, SQL &s) {
+
+	t->addRow(s.expression);
 }
 
 void select(shared_ptr<Table> &t, SQL &s) {

@@ -96,3 +96,4 @@ std::ostream & operator<<(std::ostream &os, const FieldConfig &fc) {
 	return os << "" << fc.name_ << "[" << type << "]:";
 }
 
+

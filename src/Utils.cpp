@@ -38,3 +38,20 @@ float readFloat(std::string s) {
 
 	return std::stof(value.c_str());
 }
+
+bool checkIfInt(std::string i){
+	if(i.find_first_not_of("0123456789") != std::string::npos){
+		return false;
+	}
+	return true;
+}
+bool checkIfVar(std::string pp){
+	if(pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ") != std::string::npos){
+			return false;
+		}
+		return true;
+}
+bool checkIfFloat(std::string pp){
+	std::regex reg_float("[0-9]+\.[0-9]+f?");
+	return std::regex_match(pp, reg_float);
+}

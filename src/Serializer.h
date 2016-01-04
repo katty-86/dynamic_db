@@ -13,6 +13,7 @@
 #ifndef SRC_SERIALIZER_H_
 #define SRC_SERIALIZER_H_
 
+
 class Serializer {
 public:
 	Serializer();

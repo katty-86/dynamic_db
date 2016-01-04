@@ -49,7 +49,8 @@ std::vector<std::pair<std::string, std::string>> SQL::buildStringVector(
 
 
 bool SQL::readSQL(std::string str, std::string name_of_table) {
-
+	this->flag_all=false;
+	this->flag_count=false;
 	transform(str.begin(), str.end(), str.begin(), ::toupper);
 	std::smatch m;
 

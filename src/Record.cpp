@@ -50,10 +50,53 @@ void Record::addRecord(std::vector<FieldConfig> &t) {
 	}
 }
 
+bool Record::addRecord(std::vector<FieldConfig> &t, std::vector<std::pair<std::string, std::string>> expression){
+	auto it_expression=expression.begin();
+	std::cout<<"add record"<<std::endl;
+	for (auto it = t.begin(); it != t.end(); ++it) {
+		std::string s_value= it_expression->first;
+		std::cout<<"--"<<s_value<<"--"<<std::endl;
+			if ((*it).getType() == Data_type::INT) {
+				if(checkIfInt(s_value)==false){
+					return false;
+				}
+				int value = std::atoi(s_value.c_str());
+				std::shared_ptr<Any_Field> tmp = std::make_shared<Field<int>>(
+						value);
+				this->record_.push_back(tmp);
+			} else if ((*it).getType() == Data_type::VAR) {
+				if(checkIfVar(s_value)==false){
+					std::cout<<"what is"<<std::endl;
+					return false;
+				}
+				std::shared_ptr<Any_Field> tmp =
+						std::make_shared<Field<std::string>>(s_value);
+				this->record_.push_back(tmp);
+			} else if ((*it).getType() == Data_type::FLOAT) {
+				if(checkIfFloat(s_value)==false){
+					return false;
+				}
+				float value = std::atof(s_value.c_str());
+				std::shared_ptr<Any_Field> tmp = std::make_shared<Field<float>>(
+						value);
+				this->record_.push_back(tmp);
+			} else if ((*it).getType() == Data_type::TIME) {
+				long value = std::atol(s_value.c_str());
+				std::shared_ptr<Any_Field> tmp = std::make_shared<Field<long>>(
+						value);
+				this->record_.push_back(tmp);
+			} else {
+
+			}
+			++it_expression;
+		}
+	return true;
+}
+
 void Record::addRecord(std::vector<FieldConfig> &t, std::string s) {
 
 	for (auto it = t.begin(); it != t.end(); ++it) {
-		int pos = s.find(';');
+		int pos = s.find(";");
 		std::string s_value = s.substr(1, pos - 1);
 		s.erase(0, pos + 1);
 		if ((*it).getType() == Data_type::INT) {
