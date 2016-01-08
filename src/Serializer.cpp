@@ -53,7 +53,7 @@ void Serializer::readData(std::shared_ptr<Table> t, std::string filename) {
 			pos = line.find('[');
 			name = line.substr(0, pos);
 			line.erase(0, pos + 1);
-			pos = line.find(']: ');
+			pos = line.find("]: ");
 			type = line.substr(0, pos - 2);
 			line.erase(0, pos + 1);
 			std::transform(type.begin(), type.end(), type.begin(), ::toupper);

@@ -56,6 +56,9 @@ std::vector<std::pair<std::string, std::string>> SQL::buildStringVector(
 bool SQL::readSQL(std::string str, std::string name_of_table) {
 	this->flag_all = false;
 	this->flag_count = false;
+	this->expression.clear();
+	this->where_condition.clear();
+	this->statement='0';
 	transform(str.begin(), str.end(), str.begin(), ::toupper);
 	std::smatch m;
 
@@ -77,7 +80,7 @@ bool SQL::readSQL(std::string str, std::string name_of_table) {
 	} else if (regex_search(str, m,
 			std::regex(
 					"insert[[:s:]]+into[[:s:]]+" + name_of_table
-							+ "[[:s:]]+values[[:s:]]+\\\({1}[[:s:]]*([[:print:]]+)\\\){1}",
+							+ "[[:s:]]+values[[:s:]]+\\({1}[[:s:]]*([[:print:]]+)\\){1}",
 					std::regex_constants::icase)) == true) {
 		this->statement = 'I';
 		this->expression = buildStringVector(m[1]);

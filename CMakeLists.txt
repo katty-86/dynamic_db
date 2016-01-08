@@ -1,38 +1,38 @@
 cmake_minimum_required (VERSION 3.4.1)
+option(test "build all test" OFF)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(PROJECT_NAME_STR dynamic_db)
-project (${PROJECT_NAME_STR})
+set(PROJECT_NAME dynamic_db)
+project (${PROJECT_NAME})
 find_package(Threads REQUIRED)
 
 #--------------
 #module
 #--------------
-#include_directories(include)
-#file(GLOB SOURCES "src/*.cpp")
-#add_executable(dynamic_db ${SOURCES})
+include_directories(include)
+file(GLOB SOURCES "src/*.cpp")
+add_library(dynamic_db_lib ${SOURCES})
+add_executable(dynamic_db main/Dynamic_db.cpp)
 
-set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/include)
-set(EXT_PROJECTS_DIR ${PROJECT_SOURCE_DIR}/ext)
+target_link_libraries(dynamic_db dynamic_db_lib)
 
-add_subdirectory(${EXT_PROJECTS_DIR}/gtest)
-
-#-------------------
-# Test
-#-------------------
+if(test)
+add_subdirectory( ${PROJECT_SOURCE_DIR}/lib)
 enable_testing()
-set(PROJECT_TEST_NAME ${PROJECT_NAME_STR}_test)
-include_directories(${GTEST_INCLUDE_DIRS} ${COMMON_INCLUDES})
+#include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+include_directories(${GTEST_INCLUDE_DIRS} include)
 
-file(GLOB TEST_SRC_FILES ${PROJECT_SOURCE_DIR}/test/*.cpp)
-add_executable(${PROJECT_TEST_NAME} ${TEST_SRC_FILES})
-add_dependencies(${PROJECT_TEST_NAME} googletest)
+file(GLOB TEST_SOURCES "test/*.cpp")
+add_executable(runUnitTests ${TEST_SOURCES} )
+add_dependencies(runUnitTests googletest)
 
-target_link_libraries( ${PROJECT_TEST_NAME}
-	 ${GTEST_LIBS_DIR}/libgtest.a
-        ${GTEST_LIBS_DIR}/libgtest_main.a
-        )
+target_link_libraries(runUnitTests dynamic_db_lib)
+target_link_libraries(runUnitTests ${GTEST_LIBS_DIR}/libgtest.a ${GTEST_LIBS_DIR}/libgtest_main.a )
+target_link_libraries(runUnitTests ${CMAKE_THREAD_LIBS_INIT})
 
-target_link_libraries(${PROJECT_TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
 
-add_test(test1 ${PROJECT_TEST_NAME})
+
+add_test(NAME test1 COMMAND runUnitTests)
+
+
+endif()

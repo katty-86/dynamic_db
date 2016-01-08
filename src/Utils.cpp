@@ -29,7 +29,7 @@ std::string readString(std::string s) {
 
 float readFloat(std::string s) {
 	std::string value;
-	std::regex reg_float("[0-9]+\.[0-9]+f");
+	std::regex reg_float("[0-9]+\\.[0-9]+f");
 	do {
 		std::cout << "Set correct value of float for field [" << s << "]: ";
 		std::cin >> value;
@@ -46,12 +46,13 @@ bool checkIfInt(std::string i){
 	return true;
 }
 bool checkIfVar(std::string pp){
-	if(pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ") != std::string::npos){
-			return false;
+	transform(pp.begin(), pp.end(), pp.begin(), ::toupper);
+	if(pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ") == std::string::npos){
+			return true;
 		}
-		return true;
+		return false;
 }
 bool checkIfFloat(std::string pp){
-	std::regex reg_float("[0-9]+\.[0-9]+f?");
+	std::regex reg_float("[0-9]+\\.{1}[0-9]+(f|F)?");
 	return std::regex_match(pp, reg_float);
 }
