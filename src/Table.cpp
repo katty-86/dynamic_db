@@ -16,24 +16,30 @@ Table::~Table() {
 	// TODO Auto-generated destructor stub
 }
 std::string Table::getName() const {
-	return this->name_;
+	return this->name;
 }
 void Table::setName(std::string pp) {
 
-	this->name_ = pp;
+	this->name = pp;
 }
 
 void Table::addConfigField(std::string type, std::string name) {
 
 	std::shared_ptr<FieldConfig> fg = std::make_shared<FieldConfig>(name, type);
-	this->vec_config_.push_back(*fg);
+	this->vec_config.push_back(*fg);
 
 }
 
+void Table::createTable(const std::string &f, std::vector<std::pair <std::string, std::string>> &values){
+	this->name=f;
+	for(auto &i: values){
+		addConfigField(i.first, i.second);
+	}
+}
 void Table::describeTable() {
-	if (this->vec_config_.empty() == false) {
-		std::cout << "*table = \"" << this->name_ << "\"\n";
-		for (auto it = this->vec_config_.begin(); it != this->vec_config_.end();
+	if (this->vec_config.empty() == false) {
+		std::cout << "*table = \"" << this->name << "\"\n";
+		for (auto it = this->vec_config.begin(); it != this->vec_config.end();
 				++it) {
 			std::cout << "" << *it << "\n";
 		}
@@ -45,14 +51,14 @@ void Table::describeTable() {
 }
 
 void Table::printTable() {
-	if (this->vec_config_.empty() == false) {
-		std::cout << "*table = \"" << this->name_ << "\"\n";
-		for (auto it = this->vec_config_.begin(); it != this->vec_config_.end();
+	if (this->vec_config.empty() == false) {
+		std::cout << "*table = \"" << this->name << "\"\n";
+		for (auto it = this->vec_config.begin(); it != this->vec_config.end();
 				++it) {
 			std::cout << "" << *it << " ";
 		}
 		std::cout << "\n";
-		for (auto it = this->list_data_.begin(); it != this->list_data_.end();
+		for (auto it = this->list_data.begin(); it != this->list_data.end();
 				++it) {
 			std::cout << "" << *it << "\n";
 		}
@@ -64,11 +70,11 @@ void Table::printTable() {
 }
 
 void Table::addRow(std::vector<std::pair<std::string, std::string>> expression) {
-	if(this->vec_config_.size()==expression.size()){
+	if(this->vec_config.size()==expression.size()){
 		std::shared_ptr<Record> r = std::make_shared<Record>();
-			bool resultFlag =r->addRecord(this->vec_config_, expression);
+			bool resultFlag =r->addRecord(this->vec_config, expression);
 			if(resultFlag==true){
-				this->list_data_.push_back(*r);
+				this->list_data.push_back(*r);
 			}
 			else{
 				std::cout<<"Incorect type of params insert"<<std::endl;
@@ -81,32 +87,32 @@ void Table::addRow(std::vector<std::pair<std::string, std::string>> expression) 
 
 void Table::addRow() {
 	std::shared_ptr<Record> r = std::make_shared<Record>();
-	r->addRecord(this->vec_config_);
-	this->list_data_.push_back(*r);
+	r->addRecord(this->vec_config);
+	this->list_data.push_back(*r);
 
 }
 void Table::addRow(std::string s) {
 	std::shared_ptr<Record> r = std::make_shared<Record>();
-	r->addRecord(this->vec_config_, s);
-	this->list_data_.push_back(*r);
+	r->addRecord(this->vec_config, s);
+	this->list_data.push_back(*r);
 }
 
 std::vector<FieldConfig> Table::getVec_config() {
-	return this->vec_config_;
+	return this->vec_config;
 }
 
 std::string Table::getName() {
-	return this->name_;
+	return this->name;
 }
 
 std::list<Record> Table::getList_data() {
-	return this->list_data_;
+	return this->list_data;
 }
 
 void Table::clearTable() {
-	this->vec_config_.clear();
-	this->list_data_.clear();
-	this->name_ = "";
+	this->vec_config.clear();
+	this->list_data.clear();
+	this->name = "";
 }
 
 std::list<Record> Table::findMatchingRow(
@@ -115,12 +121,12 @@ std::list<Record> Table::findMatchingRow(
 	key = v[0].first;
 	value = v[0].second;
 	std::list<Record> list_result;
-	auto ir_rec = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+	auto ir_rec = std::find_if(this->vec_config.begin(), vec_config.end(),
 			[&key]( FieldConfig &c) {return c.getName()==key;});
-	if (ir_rec != vec_config_.end()) {
-		int pos = std::distance(vec_config_.begin(), ir_rec);
-		for (auto it_list = this->list_data_.begin();
-				it_list != this->list_data_.end(); ++it_list) {
+	if (ir_rec != vec_config.end()) {
+		int pos = std::distance(vec_config.begin(), ir_rec);
+		for (auto it_list = this->list_data.begin();
+				it_list != this->list_data.end(); ++it_list) {
 
 			if (((*it_list).compareRecord(value, pos)) == true) {
 				list_result.push_back(*it_list);
@@ -139,14 +145,14 @@ int Table::removeRowFromDB(std::vector<std::pair<std::string, std::string>> v) {
 	key = v[0].first;
 	value = v[0].second;
 	int count = 0;
-	auto ir_rec = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+	auto ir_rec = std::find_if(this->vec_config.begin(), vec_config.end(),
 			[&key]( FieldConfig &c) {return c.getName()==key;});
-	if (ir_rec != vec_config_.end()) {
-		int pos = std::distance(vec_config_.begin(), ir_rec);
-		this->list_data_.erase(
-				std::remove_if(this->list_data_.begin(), this->list_data_.end(),
+	if (ir_rec != vec_config.end()) {
+		int pos = std::distance(vec_config.begin(), ir_rec);
+		this->list_data.erase(
+				std::remove_if(this->list_data.begin(), this->list_data.end(),
 						[&value, &pos](Record &r) {return r.compareRecord(value, pos);}),
-				this->list_data_.end());
+				this->list_data.end());
 	} else {
 		std::cout << "not correct key" << std::endl;
 	}
@@ -161,12 +167,12 @@ int Table::countMatchingRow(
 	value = v[0].second;
 
 	int count = 0;
-	auto ir_rec = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+	auto ir_rec = std::find_if(this->vec_config.begin(), vec_config.end(),
 			[&key]( FieldConfig &c) {return c.getName()==key;});
-	if (ir_rec != vec_config_.end()) {
-		int pos = std::distance(vec_config_.begin(), ir_rec);
-		for (auto it_list = this->list_data_.begin();
-				it_list != this->list_data_.end(); ++it_list) {
+	if (ir_rec != vec_config.end()) {
+		int pos = std::distance(vec_config.begin(), ir_rec);
+		for (auto it_list = this->list_data.begin();
+				it_list != this->list_data.end(); ++it_list) {
 			if (((*it_list).compareRecord(value, pos)) == true) {
 				count++;
 			}
@@ -189,19 +195,19 @@ int Table::updateRowFromDB(
 	std::string condition_key = condition[0].first;
 	std::string condition_value = condition[0].second;
 
-	auto it_update = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+	auto it_update = std::find_if(this->vec_config.begin(), vec_config.end(),
 			[&update_key]( FieldConfig &c) {return c.getName()==update_key;});
 	auto it_condition =
-			std::find_if(this->vec_config_.begin(), vec_config_.end(),
+			std::find_if(this->vec_config.begin(), vec_config.end(),
 					[&condition_key]( FieldConfig &c) {return c.getName()==condition_key;});
 
-	if ((it_update != vec_config_.end())
-			&& (it_condition != vec_config_.end())) {
-		int pos_update = std::distance(vec_config_.begin(), it_update);
-		int pos_condition = std::distance(vec_config_.begin(), it_condition);
+	if ((it_update != vec_config.end())
+			&& (it_condition != vec_config.end())) {
+		int pos_update = std::distance(vec_config.begin(), it_update);
+		int pos_condition = std::distance(vec_config.begin(), it_condition);
 	//	std::cout << "tutaj" << std::endl;
-		for (auto it_list = this->list_data_.begin();
-				it_list != this->list_data_.end(); ++it_list) {
+		for (auto it_list = this->list_data.begin();
+				it_list != this->list_data.end(); ++it_list) {
 			if (((*it_list).compareRecord(condition_value, pos_condition))
 					== true) {
 			//	std::cout << "tutaj!" << std::endl;
@@ -212,11 +218,11 @@ int Table::updateRowFromDB(
 			}
 
 		}
-	} else if ((it_update == vec_config_.end())
-			&& (it_condition != vec_config_.end())) {
+	} else if ((it_update == vec_config.end())
+			&& (it_condition != vec_config.end())) {
 		std::cout << "Incorrect key in update statement" << std::endl;
-	} else if ((it_update != vec_config_.end())
-			&& (it_condition == vec_config_.end())) {
+	} else if ((it_update != vec_config.end())
+			&& (it_condition == vec_config.end())) {
 		std::cout << "Incorrect key in condition statement" << std::endl;
 	} else {
 		std::cout << "Both keys are incorrect" << std::endl;
@@ -232,14 +238,14 @@ int Table::updateAllFromDB(
 	std::string update_key = update[0].first;
 	std::string update_value = update[0].second;
 
-	auto it_update = std::find_if(this->vec_config_.begin(), vec_config_.end(),
+	auto it_update = std::find_if(this->vec_config.begin(), vec_config.end(),
 			[&update_key]( FieldConfig &c) {return c.getName()==update_key;});
 
-	if (it_update != vec_config_.end()) {
-		int pos_update = std::distance(vec_config_.begin(), it_update);
+	if (it_update != vec_config.end()) {
+		int pos_update = std::distance(vec_config.begin(), it_update);
 		//std::cout << "tutaj" << std::endl;
-		for (auto it_list = this->list_data_.begin();
-				it_list != this->list_data_.end(); ++it_list) {
+		for (auto it_list = this->list_data.begin();
+				it_list != this->list_data.end(); ++it_list) {
 			//std::cout << "tutaj!" << std::endl;
 			(*it_list).updateRecord(update_value, pos_update,
 					(*it_update).getType());
@@ -255,20 +261,20 @@ int Table::updateAllFromDB(
 }
 
 bool Table::checkIfListDataEmpty() {
-	return this->list_data_.empty();
+	return this->list_data.empty();
 }
 bool Table::checkIfVecConfigEmpty() {
-	return this->vec_config_.empty();
+	return this->vec_config.empty();
 }
 
 int Table::sizeListData() {
-	return this->list_data_.size();
+	return this->list_data.size();
 }
 
 int Table::removeAllFromDB() {
-	int list_data_size = this->list_data_.size();
-	this->list_data_.clear();
-	return list_data_size;
+	int list_datasize = this->list_data.size();
+	this->list_data.clear();
+	return list_datasize;
 }
 std::list<std::string> Table::findMatchingRowAccordingExpression(
 		std::vector<std::pair<std::string, std::string>> e,

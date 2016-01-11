@@ -8,7 +8,7 @@ using namespace std;
 class SQLTest: public ::testing::Test {
 protected:
 	SQL *sql;
-	string test1;
+
 	virtual void SetUp() {
 	}
 	virtual void TearDown() {

@@ -16,8 +16,8 @@ enum class Data_type {
 };
 
 class FieldConfig {
-	std::string name_;
-	Data_type dtype_;
+	std::string name;
+	Data_type dtype;
 	friend std::ostream & operator<<(std::ostream &os, const FieldConfig &fc);
 
 public:

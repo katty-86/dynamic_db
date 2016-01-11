@@ -18,9 +18,9 @@
 #include <iterator>
 
 class Table {
-	std::string name_;
-	std::vector<FieldConfig> vec_config_;
-	std::list<Record> list_data_;
+	std::string name;
+	std::vector<FieldConfig> vec_config;
+	std::list<Record> list_data;
 
 public:
 	Table();
@@ -28,6 +28,7 @@ public:
 	std::string getName() const;
 	void setName(std::string pp);
 	void addConfigField(std::string type, std::string name);
+	void createTable(const std::string &f, std::vector<std::pair <std::string, std::string>> &values);
 	void addRow();
 	void addRow(std::string s);
 	void addRow(std::vector<std::pair<std::string, std::string>> expression);

@@ -33,8 +33,7 @@ void Record::addRecord(std::vector<FieldConfig> &t) {
 					std::make_shared<Field<std::string>>(value);
 			this->record_.push_back(tmp);
 		} else if ((*it).getType() == Data_type::FLOAT) {
-			float value;
-			std::cin >> value;
+			float value= readFloat((*it).getName());
 			std::shared_ptr<Any_Field> tmp = std::make_shared<Field<float>>(
 					value);
 			this->record_.push_back(tmp);

@@ -29,12 +29,12 @@ std::string readString(std::string s) {
 
 float readFloat(std::string s) {
 	std::string value;
-	std::regex reg_float("[0-9]+\\.[0-9]+f");
+	std::regex reg_float("[0-9]+\\.{1}[0-9]+(f|F)?");
 	do {
 		std::cout << "Set correct value of float for field [" << s << "]: ";
 		std::cin >> value;
 		std::cin.ignore(256, '\n');
-	} while (std::regex_match(value, reg_float));
+	} while (!std::regex_match(value, reg_float));
 
 	return std::stof(value.c_str());
 }

@@ -16,27 +16,24 @@ Serializer::~Serializer() {
 	// TODO Auto-generated destructor stub
 }
 
-void Serializer::writaData(std::shared_ptr<Table> t, std::string filename) {
+void Serializer::writaData(std::shared_ptr<Table> &t,std::string filename) {
 	std::vector<FieldConfig> vec_c = t->getVec_config();
 	std::list<Record> list_d = t->getList_data();
 	std::ofstream myfile;
 	myfile.open(filename);
 	myfile << t->getName() << "|";
-	//myfile << vec_c.size() << "|";
 	for (auto it = vec_c.begin(); it != vec_c.end(); ++it) {
 		myfile << *it << " ";
 	}
 	myfile << "|\n";
 
-	//myfile << list_d.size() << "|\n";
 	for (auto it = list_d.begin(); it != list_d.end(); ++it) {
 		myfile << *it << "\n";
 	}
-	//myfile << std::endl;
 	myfile.close();
 }
 
-void Serializer::readData(std::shared_ptr<Table> t, std::string filename) {
+void Serializer::readData(std::shared_ptr<Table> &t, std::string filename) {
 	std::string line;
 	std::ifstream myfile(filename);
 	if (myfile.is_open()) {
@@ -54,12 +51,12 @@ void Serializer::readData(std::shared_ptr<Table> t, std::string filename) {
 			name = line.substr(0, pos);
 			line.erase(0, pos + 1);
 			pos = line.find("]: ");
-			type = line.substr(0, pos - 2);
-			line.erase(0, pos + 1);
+			type = line.substr(0, pos);
+			line.erase(0, pos + 3); //deleting "]: "
 			std::transform(type.begin(), type.end(), type.begin(), ::toupper);
 			std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 			t->addConfigField(type, name);
-		} while (line.size() != 1);
+		} while (line != "|");
 		while (getline(myfile, line)) {
 			std::transform(line.begin(), line.end(), line.begin(), ::toupper);
 			t->addRow(line);
