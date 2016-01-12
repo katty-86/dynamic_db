@@ -21,10 +21,10 @@ public:
 	Record();
 	~Record();
 	void addRecord(std::vector<FieldConfig> &t);
-	void addRecord(std::vector<FieldConfig> &t, std::string s);
+	bool addRecord(std::vector<FieldConfig> &t, std::string s);
 	bool addRecord(std::vector<FieldConfig> &t, std::vector<std::pair<std::string, std::string>> expression);
 	std::vector<std::shared_ptr<Any_Field>> getRecord();
 	bool compareRecord(std::string value, int distance);
-	void updateRecord(std::string value, int distance, Data_type dt);
+	bool updateRecord(std::string value, int distance, Data_type dt);
 };
 
