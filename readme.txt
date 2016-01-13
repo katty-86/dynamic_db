@@ -15,7 +15,7 @@ Przewidziane funkcje:
 --z wyrazenie warunkowym - aktualizacja pasujących rekordów (100%)
 -wstawianie nowych elementów
 --podanie komendy "i" i wpisanie wartosci dla kolejnych recordów z lini poleceń (100%)
---podanie komendy "insert into $table_name values (val1, val2, val3, ....)"	(0%)
+--podanie komendy "insert into $table_name values (val1, val2, val3, ....)"	(100%)
 -usuniecie recordów
 --bez wyrazenia warunkowego -usunięcie wszystkich rekordów (100%)
 --z wyrazenie warunkowym - usunięcie pasujących rekordów (100%)
