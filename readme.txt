@@ -47,4 +47,9 @@ Testy -modułami
 
 
 
+ad projectcd 
+1. mkdir build
+2. cd build
+3. cmake -Dtest=ON ..
+4. cmake --build .
 
