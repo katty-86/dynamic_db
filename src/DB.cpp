@@ -17,73 +17,21 @@ DB::~DB() {
 	// TODO Auto-generated destructor stub
 }
 
-shared_ptr<Table> DB::getTable(){
+shared_ptr<Table> DB::getTable() const {
 	return this->t;
 }
 
-void DB::createTable() {
-
-	int n;
-	string name;
-	if(t->getName()!=""){
-		t->clearTable();
-	}
-	cout << "Set name of table" << endl;
-	cin >> name;
-	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
-	cout << "how many field do you want to store in table" << endl;
-	cin >> n;
-	cout << "creating tables...." << endl;
-	std::vector<std::pair <std::string, std::string>> values(n);
-	for (int i = 0; i < n; i++) {
-		//checking function for type
-		string name, type;
-		do {
-			cout << "Write type from [" << acceptable_type << "]" << endl;
-			cin >> type;
-			std::transform(type.begin(), type.end(), type.begin(), ::toupper);
-		} while (acceptable_type.find(type) == std::string::npos);
-		cout << "Write name: ";
-		cin >> name;
-		cin.ignore(256, '\n');
-		std::transform(name.begin(), name.end(), name.begin(), ::toupper);
-		values.at(i)= pair <string, string>(type, name);
-	}
-	t->createTable(name,values);
-}
-
-void DB::saveBDtoFile() {
-	string filename;
-	cout << "Set name of the file" << endl;
-	cin >> filename;
-	cin.ignore(256, '\n');
+bool DB::saveBDtoFile(string &filename) {
 	Serializer helper;
-	helper.writaData( t, filename);
+	return helper.writaData( t, filename);
 }
-void DB::readDBfromFile() {
+bool DB::readDBfromFile(string &filename) {
 	t->clearTable();
-	string filename;
-	cout << "Set name of the file" << endl;
-	cin >> filename;
-	cin.ignore(256, '\n');
 	Serializer helper;
-	helper.readData(t, filename);
+	return helper.readData(t, filename);
 }
 
-void DB::insert() {
-	if (t->checkIfVecConfigEmpty() == false) {
-		cout << "How many rows you want to add" << endl;
-		int rows;
-		cin >> rows;
-		cin.ignore(256, '\n');
-		for (int i = 0; i < rows; ++i) {
-			t->addRow();
-		}
-		t->printTable();
-	} else {
-		cout << "Create table before inserting sth" << endl;
-	}
-}
+
 
 void DB::insert( SQL &s) {
 	if (t->checkIfVecConfigEmpty() == false){

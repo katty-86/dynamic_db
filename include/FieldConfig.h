@@ -11,25 +11,24 @@
 #include <iostream>
 #include <memory>
 
-enum class Data_type {
+enum class DataType {
 	VAR = 1, INT = 2, FLOAT = 3, TIME = 4, UNKNOWN = 6
 };
 
 class FieldConfig {
 	std::string name;
-	Data_type dtype;
+	DataType dtype;
 	friend std::ostream & operator<<(std::ostream &os, const FieldConfig &fc);
 
 public:
-	FieldConfig();
 	FieldConfig(std::string name, std::string type);
 	~FieldConfig();
 	std::string getName() const;
-	void setName(std::string pp);
-	Data_type getType() const;
+	void setName(const std::string pp);
+	DataType getType() const;
 	std::string getTypeString() const;
 	std::string getNameType() const;
-	int getPosition() const;
+
 
 };
 

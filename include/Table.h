@@ -26,26 +26,23 @@ public:
 	Table();
 	~Table();
 	std::string getName() const;
-	void setName(std::string pp);
+	void setName(const std::string pp);
 	void addConfigField(std::string type, std::string name);
 	void createTable(const std::string &f, std::vector<std::pair <std::string, std::string>> &values);
-	void addRow();
 	void addRow(std::string s);
 	void addRow(std::vector<std::pair<std::string, std::string>> expression);
 	void describeTable();
 	void printTable();
 	void read_data(Table &s, std::string filename);
 	void save_data(const Table &s, std::string filename);
-	std::vector<FieldConfig> getVec_config();
-	std::list<Record> getList_data();
-	std::string getName();
+	std::vector<FieldConfig> getVec_config() const;
+	std::list<Record> getList_data()const ;
 	void clearTable();
-	//select * from nazwa_tabeli where
 	std::list<Record> findMatchingRow(
 			std::vector<std::pair<std::string, std::string>> v);
 	std::list<std::string> findMatchingRowAccordingExpression(std::vector<std::pair<std::string, std::string>> e,
 				std::vector<std::pair<std::string, std::string>> v);
-	int countMatchingRow(std::vector<std::pair<std::string, std::string>> v);
+	int countMatchingRow(const std::vector<std::pair<std::string, std::string>> v);
 	bool checkIfListDataEmpty();
 	bool checkIfVecConfigEmpty();
 	int sizeListData();

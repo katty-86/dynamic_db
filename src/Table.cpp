@@ -31,6 +31,9 @@ void Table::addConfigField(std::string type, std::string name) {
 }
 
 void Table::createTable(const std::string &f, std::vector<std::pair <std::string, std::string>> &values){
+	if(this->getName()!=""){
+		this->clearTable();
+	}
 	this->name=f;
 	for(auto &i: values){
 		addConfigField(i.first, i.second);
@@ -85,27 +88,19 @@ void Table::addRow(std::vector<std::pair<std::string, std::string>> expression) 
 	}
 }
 
-void Table::addRow() {
-	std::shared_ptr<Record> r = std::make_shared<Record>();
-	r->addRecord(this->vec_config);
-	this->list_data.push_back(*r);
 
-}
 void Table::addRow(std::string s) {
 	std::shared_ptr<Record> r = std::make_shared<Record>();
 	r->addRecord(this->vec_config, s);
 	this->list_data.push_back(*r);
 }
 
-std::vector<FieldConfig> Table::getVec_config() {
+std::vector<FieldConfig> Table::getVec_config() const{
 	return this->vec_config;
 }
 
-std::string Table::getName() {
-	return this->name;
-}
 
-std::list<Record> Table::getList_data() {
+std::list<Record> Table::getList_data() const{
 	return this->list_data;
 }
 
@@ -205,15 +200,12 @@ int Table::updateRowFromDB(
 			&& (it_condition != vec_config.end())) {
 		int pos_update = std::distance(vec_config.begin(), it_update);
 		int pos_condition = std::distance(vec_config.begin(), it_condition);
-	//	std::cout << "tutaj" << std::endl;
 		for (auto it_list = this->list_data.begin();
 				it_list != this->list_data.end(); ++it_list) {
 			if (((*it_list).compareRecord(condition_value, pos_condition))
 					== true) {
-			//	std::cout << "tutaj!" << std::endl;
 				(*it_list).updateRecord(update_value, pos_update,
 						(*it_update).getType());
-			///	std::cout << "\n->" << *it_list << "\n";
 				count++;
 			}
 
@@ -243,13 +235,10 @@ int Table::updateAllFromDB(
 
 	if (it_update != vec_config.end()) {
 		int pos_update = std::distance(vec_config.begin(), it_update);
-		//std::cout << "tutaj" << std::endl;
 		for (auto it_list = this->list_data.begin();
 				it_list != this->list_data.end(); ++it_list) {
-			//std::cout << "tutaj!" << std::endl;
 			(*it_list).updateRecord(update_value, pos_update,
 					(*it_update).getType());
-			//std::cout << "\n->" << *it_list << "\n";
 			count++;
 
 		}

@@ -16,7 +16,7 @@ Serializer::~Serializer() {
 	// TODO Auto-generated destructor stub
 }
 
-void Serializer::writaData(std::shared_ptr<Table> &t,std::string filename) {
+bool Serializer::writaData(std::shared_ptr<Table> &t,const std::string filename) {
 	std::vector<FieldConfig> vec_c = t->getVec_config();
 	std::list<Record> list_d = t->getList_data();
 	std::ofstream myfile;
@@ -31,9 +31,10 @@ void Serializer::writaData(std::shared_ptr<Table> &t,std::string filename) {
 		myfile << *it << "\n";
 	}
 	myfile.close();
+	return true;
 }
 
-void Serializer::readData(std::shared_ptr<Table> &t, std::string filename) {
+bool Serializer::readData(std::shared_ptr<Table> &t, const std::string filename) {
 	std::string line;
 	std::ifstream myfile(filename);
 	if (myfile.is_open()) {
@@ -65,5 +66,7 @@ void Serializer::readData(std::shared_ptr<Table> &t, std::string filename) {
 		myfile.close();
 	} else {
 		std::cout << "Unable to open file" << std::endl;
+		return false;
 	}
+	return true;
 }

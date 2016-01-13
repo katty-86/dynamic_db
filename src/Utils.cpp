@@ -40,8 +40,10 @@ float readFloat(std::string s) {
 }
 
 bool checkIfInt(std::string i){
-	std::regex reg_int("[[:s:]]*[0-9]+");
-	return std::regex_match(i, reg_int);
+	if(i.find_first_not_of("0123456789") != std::string::npos){
+		return false;
+	}
+	return true;
 }
 bool checkIfVar(std::string pp){
 	transform(pp.begin(), pp.end(), pp.begin(), ::toupper);

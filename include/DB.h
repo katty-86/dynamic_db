@@ -17,16 +17,13 @@ using namespace std;
 
 
 class DB {
-	string acceptable_type = ("INT VAR TIME FLOAT");
 	shared_ptr<Table> t;
 public:
 	DB();
 	~DB();
-	shared_ptr<Table> getTable();
-	void createTable();
-	void saveBDtoFile();
-	void readDBfromFile();
-	void insert();
+	shared_ptr<Table> getTable() const;
+	bool saveBDtoFile(string &filename);
+	bool readDBfromFile(string &filename);
 	void insert( SQL &s);
 	void select( SQL &s);
 	void deleteRow( SQL &s);

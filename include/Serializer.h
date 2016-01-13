@@ -18,8 +18,8 @@ class Serializer {
 public:
 	Serializer();
 	~Serializer();
-	void writaData(std::shared_ptr<Table> &t, std::string filename);
-	void readData(std::shared_ptr<Table> &t,std::string filename);
+	bool writaData(std::shared_ptr<Table> &t, const std::string filename);
+	bool readData(std::shared_ptr<Table> &t,const std::string filename);
 };
 
 #endif /* SRC_SERIALIZER_H_ */
