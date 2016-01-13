@@ -23,7 +23,8 @@ protected:
 
 TEST_F(SQLTest, basicSelect) {
 
-	bool testval= sql->readSQL(std::string("select * from Customer"), std::string("Customer1"));
+	bool testval = sql->readSQL(std::string("select * from Customer"),
+			std::string("Customer1"));
 	EXPECT_FALSE(testval);
 
 	EXPECT_TRUE(
@@ -62,24 +63,24 @@ TEST_F(SQLTest, selectchekingFlag) {
 	sql->readSQL(std::string("select * from Customer"),
 			std::string("Customer"));
 	EXPECT_EQ('S', sql->statement);
-	EXPECT_TRUE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_TRUE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(0, sql->where_condition.size());
 
 	sql->readSQL(std::string("select count(*) from Customer where imie = test"),
 			std::string("Customer"));
 	EXPECT_EQ('S', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_TRUE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_TRUE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(1, sql->where_condition.size());
 
 	sql->readSQL(std::string("select imie from Customer where imie = 'test'"),
 			std::string("Customer"));
 	EXPECT_EQ('S', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(1, sql->expression.size());
 	EXPECT_EQ(1, sql->where_condition.size());
 	pairs = sql->expression.back();
@@ -93,12 +94,11 @@ TEST_F(SQLTest, selectchekingFlag) {
 	EXPECT_STREQ("IMIE", first.c_str());
 	EXPECT_STREQ("TEST", second.c_str());
 
-
 	sql->readSQL(std::string("select imie,test from Customer where imie=test"),
 			std::string("Customer"));
 	EXPECT_EQ('S', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(2, sql->expression.size());
 	EXPECT_EQ(1, sql->where_condition.size());
 	pairs = sql->expression.back();
@@ -147,7 +147,7 @@ TEST_F(SQLTest, InsertchekingFlag) {
 	string first, second;
 	sql->readSQL(std::string("Insert into Customer"), std::string("Customer"));
 	EXPECT_EQ('0', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
+	EXPECT_FALSE(sql->flag_all);
 	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(0, sql->where_condition.size());
@@ -175,7 +175,6 @@ TEST_F(SQLTest, InsertchekingFlag) {
 	second = pairs.second;
 	EXPECT_STREQ("IMIE", first.c_str());
 	EXPECT_STREQ("", second.c_str());
-
 
 	sql->readSQL(std::string("insert into from Customer where imie = test"),
 			std::string("Customer"));
@@ -223,7 +222,7 @@ TEST_F(SQLTest, UpdatechekingFlag) {
 	sql->readSQL(std::string("Update Customer set "), std::string("Customer"));
 	EXPECT_EQ('0', sql->statement);
 	EXPECT_FALSE(sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(0, sql->where_condition.size());
 
@@ -244,9 +243,7 @@ TEST_F(SQLTest, UpdatechekingFlag) {
 	EXPECT_STREQ("IMIE", first.c_str());
 	EXPECT_STREQ("ANIA", second.c_str());
 
-
-	sql->readSQL(
-			std::string("Update Customer set test = est1 where imie= kon"),
+	sql->readSQL(std::string("Update Customer set test = est1 where imie= kon"),
 			std::string("Customer"));
 	EXPECT_EQ('U', sql->statement);
 	EXPECT_EQ(1, sql->expression.size());
@@ -305,28 +302,28 @@ TEST_F(SQLTest, basicDelete) {
 TEST_F(SQLTest, deletetchekingFlag) {
 	std::pair<std::string, std::string> pairs;
 	string first, second;
-	sql->readSQL(std::string("delete from Customer"),
-			std::string("Customer"));
+	sql->readSQL(std::string("delete from Customer"), std::string("Customer"));
 	EXPECT_EQ('D', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(0, sql->where_condition.size());
 
 	sql->readSQL(std::string("delete (*) from Customer where imie = test"),
 			std::string("Customer"));
 	EXPECT_EQ('0', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(0, sql->where_condition.size());
 
-	int flag = sql->readSQL(std::string("delete from Customer where imie = 'test'"),
+	int flag = sql->readSQL(
+			std::string("delete from Customer where imie = 'test'"),
 			std::string("Customer"));
-	EXPECT_TRUE( flag);
+	EXPECT_TRUE(flag);
 	EXPECT_EQ('D', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(1, sql->where_condition.size());
 	pairs = sql->where_condition.back();
@@ -335,12 +332,11 @@ TEST_F(SQLTest, deletetchekingFlag) {
 	EXPECT_STREQ("IMIE", first.c_str());
 	EXPECT_STREQ("TEST", second.c_str());
 
-
 	sql->readSQL(std::string("delete from Customer where imie=test"),
 			std::string("Customer"));
 	EXPECT_EQ('D', sql->statement);
-	EXPECT_FALSE( sql->flag_all);
-	EXPECT_FALSE( sql->flag_count);
+	EXPECT_FALSE(sql->flag_all);
+	EXPECT_FALSE(sql->flag_count);
 	EXPECT_EQ(0, sql->expression.size());
 	EXPECT_EQ(1, sql->where_condition.size());
 	pairs = sql->where_condition.back();

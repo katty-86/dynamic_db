@@ -3,7 +3,7 @@
 
 using namespace std;
 
-TEST(utiltest, mycheckIfIntTest){
+TEST(utiltest, mycheckIfIntTest) {
 	EXPECT_TRUE(checkIfInt("12"));
 	EXPECT_FALSE(checkIfInt("1////2"));
 	EXPECT_FALSE(checkIfInt("test"));
@@ -11,7 +11,7 @@ TEST(utiltest, mycheckIfIntTest){
 	EXPECT_FALSE(checkIfInt("1,2"));
 }
 
-TEST(utiltest, mycheckIfVarTest){
+TEST(utiltest, mycheckIfVarTest) {
 	EXPECT_TRUE(checkIfVar("test"));
 	EXPECT_TRUE(checkIfVar("wwwww wwwwww"));
 	EXPECT_FALSE(checkIfVar("test?????"));
@@ -19,7 +19,7 @@ TEST(utiltest, mycheckIfVarTest){
 	EXPECT_FALSE(checkIfVar("1,,2"));
 }
 
-TEST(utiltest, mycheckIfFloatTest){
+TEST(utiltest, mycheckIfFloatTest) {
 	EXPECT_TRUE(checkIfFloat("6.9"));
 	EXPECT_TRUE(checkIfFloat("6.9f"));
 	EXPECT_TRUE(checkIfFloat("6.9F"));

@@ -16,7 +16,8 @@ Serializer::~Serializer() {
 	// TODO Auto-generated destructor stub
 }
 
-bool Serializer::writaData(std::shared_ptr<Table> &t,const std::string filename) {
+bool Serializer::writaData(std::shared_ptr<Table> &t,
+		const std::string filename) {
 	std::vector<FieldConfig> vec_c = t->getVec_config();
 	std::list<Record> list_d = t->getList_data();
 	std::ofstream myfile;
@@ -34,7 +35,8 @@ bool Serializer::writaData(std::shared_ptr<Table> &t,const std::string filename)
 	return true;
 }
 
-bool Serializer::readData(std::shared_ptr<Table> &t, const std::string filename) {
+bool Serializer::readData(std::shared_ptr<Table> &t,
+		const std::string filename) {
 	std::string line;
 	std::ifstream myfile(filename);
 	if (myfile.is_open()) {

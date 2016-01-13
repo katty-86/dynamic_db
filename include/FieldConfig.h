@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <map>
 
 enum class DataType {
 	VAR = 1, INT = 2, FLOAT = 3, TIME = 4, UNKNOWN = 6
@@ -28,7 +29,6 @@ public:
 	DataType getType() const;
 	std::string getTypeString() const;
 	std::string getNameType() const;
-
 
 };
 

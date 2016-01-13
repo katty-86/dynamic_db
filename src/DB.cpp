@@ -7,8 +7,6 @@
 
 #include "DB.h"
 
-
-
 DB::DB() {
 	t = make_shared<Table>();
 }
@@ -23,7 +21,7 @@ shared_ptr<Table> DB::getTable() const {
 
 bool DB::saveBDtoFile(string &filename) {
 	Serializer helper;
-	return helper.writaData( t, filename);
+	return helper.writaData(t, filename);
 }
 bool DB::readDBfromFile(string &filename) {
 	t->clearTable();
@@ -31,10 +29,8 @@ bool DB::readDBfromFile(string &filename) {
 	return helper.readData(t, filename);
 }
 
-
-
-void DB::insert( SQL &s) {
-	if (t->checkIfVecConfigEmpty() == false){
+void DB::insert(SQL &s) {
+	if (t->checkIfVecConfigEmpty() == false) {
 		t->addRow(s.expression);
 	}
 }
@@ -66,7 +62,7 @@ void DB::select(SQL &s) {
 
 }
 
-void DB::deleteRow( SQL &s) {
+void DB::deleteRow(SQL &s) {
 
 	if (s.where_condition.empty() == true) {
 		t->removeAllFromDB();
@@ -76,7 +72,7 @@ void DB::deleteRow( SQL &s) {
 
 }
 
-void DB::updateRow( SQL &s) {
+void DB::updateRow(SQL &s) {
 
 	if (s.where_condition.empty() == true) {
 		t->updateAllFromDB(s.expression);

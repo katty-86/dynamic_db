@@ -20,44 +20,45 @@ std::vector<std::shared_ptr<Any_Field>> Record::getRecord() {
 	return this->record_;
 }
 
-bool Record::addRecord(std::vector<FieldConfig> &t, std::vector<std::pair<std::string, std::string>> expression){
-	auto it_expression=expression.begin();
+bool Record::addRecord(std::vector<FieldConfig> &t,
+		std::vector<std::pair<std::string, std::string>> expression) {
+	auto it_expression = expression.begin();
 	for (auto it = t.begin(); it != t.end(); ++it) {
-		std::string s_value= it_expression->first;
-			if ((*it).getType() == DataType::INT) {
-				if(checkIfInt(s_value)==false){
-					return false;
-				}
-				int value = std::atoi(s_value.c_str());
-				std::shared_ptr<Any_Field> tmp = std::make_shared<Field<int>>(
-						value);
-				this->record_.push_back(tmp);
-			} else if ((*it).getType() == DataType::VAR) {
-				if(checkIfVar(s_value)==false){
-					std::cout<<"what is"<<std::endl;
-					return false;
-				}
-				std::shared_ptr<Any_Field> tmp =
-						std::make_shared<Field<std::string>>(s_value);
-				this->record_.push_back(tmp);
-			} else if ((*it).getType() == DataType::FLOAT) {
-				if(checkIfFloat(s_value)==false){
-					return false;
-				}
-				float value = std::atof(s_value.c_str());
-				std::shared_ptr<Any_Field> tmp = std::make_shared<Field<float>>(
-						value);
-				this->record_.push_back(tmp);
-			} else if ((*it).getType() == DataType::TIME) {
-				long value = std::atol(s_value.c_str());
-				std::shared_ptr<Any_Field> tmp = std::make_shared<Field<long>>(
-						value);
-				this->record_.push_back(tmp);
-			} else {
-
+		std::string s_value = it_expression->first;
+		if ((*it).getType() == DataType::INT) {
+			if (checkIfInt(s_value) == false) {
+				return false;
 			}
-			++it_expression;
+			int value = std::atoi(s_value.c_str());
+			std::shared_ptr<Any_Field> tmp = std::make_shared<Field<int>>(
+					value);
+			this->record_.push_back(tmp);
+		} else if ((*it).getType() == DataType::VAR) {
+			if (checkIfVar(s_value) == false) {
+				std::cout << "what is" << std::endl;
+				return false;
+			}
+			std::shared_ptr<Any_Field> tmp = std::make_shared < Field
+					< std::string >> (s_value);
+			this->record_.push_back(tmp);
+		} else if ((*it).getType() == DataType::FLOAT) {
+			if (checkIfFloat(s_value) == false) {
+				return false;
+			}
+			float value = std::atof(s_value.c_str());
+			std::shared_ptr<Any_Field> tmp = std::make_shared<Field<float>>(
+					value);
+			this->record_.push_back(tmp);
+		} else if ((*it).getType() == DataType::TIME) {
+			long value = std::atol(s_value.c_str());
+			std::shared_ptr<Any_Field> tmp = std::make_shared<Field<long>>(
+					value);
+			this->record_.push_back(tmp);
+		} else {
+
 		}
+		++it_expression;
+	}
 	return true;
 }
 
@@ -68,7 +69,7 @@ bool Record::addRecord(std::vector<FieldConfig> &t, std::string s) {
 		std::string s_value = s.substr(1, pos - 1);
 		s.erase(0, pos + 1);
 		if ((*it).getType() == DataType::INT) {
-			if(checkIfInt(s_value)==false){
+			if (checkIfInt(s_value) == false) {
 				return false;
 			}
 			int value = std::atoi(s_value.c_str());
@@ -76,14 +77,14 @@ bool Record::addRecord(std::vector<FieldConfig> &t, std::string s) {
 					value);
 			this->record_.push_back(tmp);
 		} else if ((*it).getType() == DataType::VAR) {
-			if(checkIfVar(s_value)==false){
+			if (checkIfVar(s_value) == false) {
 				return false;
 			}
-			std::shared_ptr<Any_Field> tmp =
-					std::make_shared<Field<std::string>>(s_value);
+			std::shared_ptr<Any_Field> tmp = std::make_shared < Field
+					< std::string >> (s_value);
 			this->record_.push_back(tmp);
 		} else if ((*it).getType() == DataType::FLOAT) {
-			if(checkIfFloat(s_value)==false){
+			if (checkIfFloat(s_value) == false) {
 				return false;
 			}
 			float value = std::atof(s_value.c_str());
@@ -91,7 +92,7 @@ bool Record::addRecord(std::vector<FieldConfig> &t, std::string s) {
 					value);
 			this->record_.push_back(tmp);
 		} else if ((*it).getType() == DataType::TIME) {
-			if(checkIfInt(s_value)==false){
+			if (checkIfInt(s_value) == false) {
 				return false;
 			}
 			long value = std::atol(s_value.c_str());
@@ -128,29 +129,26 @@ bool Record::updateRecord(std::string s_value, int distance, DataType dt) {
 
 	auto it = &this->record_[distance];
 	if (dt == DataType::INT) {
-		if(checkIfInt(s_value)){
+		if (checkIfInt(s_value)) {
 			int value = std::atoi(s_value.c_str());
 			it->reset(new Field<int>(value));
-		}
-		else{
+		} else {
 			return false;
 		}
 	} else if (dt == DataType::VAR) {
-			it->reset(new Field<std::string>(s_value));
+		it->reset(new Field<std::string>(s_value));
 	} else if (dt == DataType::FLOAT) {
-		if(checkIfFloat(s_value)){
+		if (checkIfFloat(s_value)) {
 			float value = std::atof(s_value.c_str());
 			it->reset(new Field<float>(value));
-		}
-		else{
+		} else {
 			return false;
 		}
 	} else if (dt == DataType::TIME) {
-		if(checkIfInt(s_value)){
+		if (checkIfInt(s_value)) {
 			long value = std::atol(s_value.c_str());
 			it->reset(new Field<long>(value));
-		}
-		else{
+		} else {
 			return false;
 		}
 	} else {
