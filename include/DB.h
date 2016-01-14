@@ -15,19 +15,22 @@
 #include "Serializer.h"
 using namespace std;
 
+
 class DB {
 	shared_ptr<Table> t;
 public:
 	DB();
 	~DB();
 	shared_ptr<Table> getTable() const;
-	bool saveBDtoFile(string &filename);
-	bool readDBfromFile(string &filename);
-	void insert(SQL &s);
-	void select(SQL &s);
-	void deleteRow(SQL &s);
-	void updateRow(SQL &s);
+	bool saveBDtoFile(const string &filename);
+	bool readDBfromFile(const string &filename);
+	void insert( SQL &s);
+	void select( SQL &s);
+	void deleteRow( SQL &s);
+	void updateRow( SQL &s);
 
 };
+
+
 
 #endif /* SRC_DB_H_ */

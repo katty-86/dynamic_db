@@ -39,19 +39,18 @@ float readFloat(std::string s) {
 	return std::stof(value.c_str());
 }
 
-bool checkIfInt(std::string i) {
+bool checkIfInt(std::string i){
 	std::regex reg_int("[[:s:]]*[0-9]+");
 	return std::regex_match(i, reg_int);
 }
-bool checkIfVar(std::string pp) {
+bool checkIfVar(std::string pp){
 	transform(pp.begin(), pp.end(), pp.begin(), ::toupper);
-	if (pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ")
-			== std::string::npos) {
-		return true;
-	}
-	return false;
+	if(pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ") == std::string::npos){
+			return true;
+		}
+		return false;
 }
-bool checkIfFloat(std::string pp) {
+bool checkIfFloat(std::string pp){
 	std::regex reg_float("[0-9]+\\.{1}[0-9]+(f|F)?");
 	return std::regex_match(pp, reg_float);
 }

@@ -53,12 +53,12 @@ std::vector<std::pair<std::string, std::string>> SQL::buildStringVector(
 	return vps;
 }
 
-bool SQL::readSQL(std::string str, std::string name_of_table) {
+bool SQL::readSQL( std::string str, std::string name_of_table) {
 	this->flag_all = false;
 	this->flag_count = false;
 	this->expression.clear();
 	this->where_condition.clear();
-	this->statement = '0';
+	this->statement='0';
 	transform(str.begin(), str.end(), str.begin(), ::toupper);
 	std::smatch m;
 

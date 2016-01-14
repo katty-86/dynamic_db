@@ -36,7 +36,7 @@ public:
 		return this->value_;
 	}
 
-	std::string getValueString() {
+	std::string getValueString()  {
 		std::ostringstream oss;
 		oss << this->value_;
 		return oss.str();

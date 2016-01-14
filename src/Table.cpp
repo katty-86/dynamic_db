@@ -18,26 +18,24 @@ Table::~Table() {
 std::string Table::getName() const {
 	return this->name;
 }
-void Table::setName(std::string pp) {
+void Table::setName(const std::string &pp) {
 
 	this->name = pp;
 }
 
-void Table::addConfigField(std::string type, std::string name) {
+void Table::addConfigField(const std::string &type, const std::string &name) {
 
-	std::shared_ptr<FieldConfig> fg = std::make_shared < FieldConfig
-			> (name, type);
+	std::shared_ptr<FieldConfig> fg = std::make_shared<FieldConfig>(name, type);
 	this->vec_config.push_back(*fg);
 
 }
 
-void Table::createTable(const std::string &f,
-		std::vector<std::pair<std::string, std::string>> &values) {
-	if (this->getName() != "") {
+void Table::createTable(const std::string &f, const std::vector<std::pair <std::string, std::string>> &values){
+	if(this->getName()!=""){
 		this->clearTable();
 	}
-	this->name = f;
-	for (auto &i : values) {
+	this->name=f;
+	for(auto &i: values){
 		addConfigField(i.first, i.second);
 	}
 }
@@ -74,20 +72,22 @@ void Table::printTable() {
 
 }
 
-void Table::addRow(
-		std::vector<std::pair<std::string, std::string>> expression) {
-	if (this->vec_config.size() == expression.size()) {
+void Table::addRow(const std::vector<std::pair<std::string, std::string>> &expression) {
+	if(this->vec_config.size()==expression.size()){
 		std::shared_ptr<Record> r = std::make_shared<Record>();
-		bool resultFlag = r->addRecord(this->vec_config, expression);
-		if (resultFlag == true) {
-			this->list_data.push_back(*r);
-		} else {
-			std::cout << "Incorect type of params insert" << std::endl;
-		}
-	} else {
-		std::cout << "Incorect amount of parms in insert" << std::endl;
+			bool resultFlag =r->addRecord(this->vec_config, expression);
+			if(resultFlag==true){
+				this->list_data.push_back(*r);
+			}
+			else{
+				std::cout<<"Incorect type of params insert"<<std::endl;
+			}
+	}
+	else{
+		std::cout<<"Incorect amount of parms in insert"<<std::endl;
 	}
 }
+
 
 void Table::addRow(std::string s) {
 	std::shared_ptr<Record> r = std::make_shared<Record>();
@@ -95,11 +95,12 @@ void Table::addRow(std::string s) {
 	this->list_data.push_back(*r);
 }
 
-std::vector<FieldConfig> Table::getVec_config() const {
+std::vector<FieldConfig> Table::getVec_config() const{
 	return this->vec_config;
 }
 
-std::list<Record> Table::getList_data() const {
+
+std::list<Record> Table::getList_data() const{
 	return this->list_data;
 }
 
@@ -109,8 +110,8 @@ void Table::clearTable() {
 	this->name = "";
 }
 
-std::list<Record> Table::findMatchingRow(
-		std::vector<std::pair<std::string, std::string>> v) {
+std::list<Record> Table::findMatchingRow(const
+		std::vector<std::pair<std::string, std::string>> &v) {
 	std::string key, value;
 	key = v[0].first;
 	value = v[0].second;
@@ -134,7 +135,7 @@ std::list<Record> Table::findMatchingRow(
 	return list_result;
 }
 
-int Table::removeRowFromDB(std::vector<std::pair<std::string, std::string>> v) {
+int Table::removeRowFromDB(const std::vector<std::pair<std::string, std::string>> &v) {
 	std::string key, value;
 	key = v[0].first;
 	value = v[0].second;
@@ -154,8 +155,8 @@ int Table::removeRowFromDB(std::vector<std::pair<std::string, std::string>> v) {
 	return count;
 }
 
-int Table::countMatchingRow(
-		std::vector<std::pair<std::string, std::string>> v) {
+int Table::countMatchingRow(const
+		std::vector<std::pair<std::string, std::string>> &v) {
 	std::string key, value;
 	key = v[0].first;
 	value = v[0].second;
@@ -180,8 +181,8 @@ int Table::countMatchingRow(
 }
 
 int Table::updateRowFromDB(
-		std::vector<std::pair<std::string, std::string>> update,
-		std::vector<std::pair<std::string, std::string>> condition) {
+		const std::vector<std::pair<std::string, std::string>> &update,
+		const std::vector<std::pair<std::string, std::string>> &condition) {
 	int count = 0;
 
 	std::string update_key = update[0].first;
@@ -195,7 +196,8 @@ int Table::updateRowFromDB(
 			std::find_if(this->vec_config.begin(), vec_config.end(),
 					[&condition_key]( FieldConfig &c) {return c.getName()==condition_key;});
 
-	if ((it_update != vec_config.end()) && (it_condition != vec_config.end())) {
+	if ((it_update != vec_config.end())
+			&& (it_condition != vec_config.end())) {
 		int pos_update = std::distance(vec_config.begin(), it_update);
 		int pos_condition = std::distance(vec_config.begin(), it_condition);
 		for (auto it_list = this->list_data.begin();
@@ -222,7 +224,7 @@ int Table::updateRowFromDB(
 }
 
 int Table::updateAllFromDB(
-		std::vector<std::pair<std::string, std::string>> update) {
+		const std::vector<std::pair<std::string, std::string>> &update) {
 	int count = 0;
 
 	std::string update_key = update[0].first;
@@ -264,7 +266,7 @@ int Table::removeAllFromDB() {
 	return list_datasize;
 }
 std::list<std::string> Table::findMatchingRowAccordingExpression(
-		std::vector<std::pair<std::string, std::string>> e,
-		std::vector<std::pair<std::string, std::string>> v) {
-}
+		const std::vector<std::pair<std::string, std::string>> &e,
+		const std::vector<std::pair<std::string, std::string>> &v) {}
+
 

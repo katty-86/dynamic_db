@@ -13,19 +13,17 @@
 
 struct SQL {
 	char statement;
-	bool flag_count :1; //=false;
-	bool flag_all :1; //=false;
+	bool flag_count:1;//=false;
+	bool flag_all:1;//=false;
 	std::vector<std::pair<std::string, std::string>> expression;
 	std::vector<std::pair<std::string, std::string>> where_condition;
 
 	SQL();
 	~SQL();
 	void printAll();
-	bool readSQL(std::string str, std::string name_of_table);
-	std::vector<std::pair<std::string, std::string>> buidVector(std::string,
-			std::string); //utils
+	bool readSQL(  std::string str,  std::string name_of_table);
 	std::vector<std::pair<std::string, std::string>> buildPairVector(
-			std::string str);
+			std::string  str);
 	std::vector<std::pair<std::string, std::string>> buildStringVector(
 			std::string str);
 };

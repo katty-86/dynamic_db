@@ -30,7 +30,7 @@ FieldConfig::~FieldConfig() {
 std::string FieldConfig::getName() const {
 	return this->name;
 }
-void FieldConfig::setName(const std::string pp) {
+void FieldConfig::setName(const std::string &pp) {
 	this->name = pp;
 }
 
@@ -89,4 +89,5 @@ std::ostream & operator<<(std::ostream &os, const FieldConfig &fc) {
 
 	return os << "" << fc.name << "[" << type << "]:";
 }
+
 
