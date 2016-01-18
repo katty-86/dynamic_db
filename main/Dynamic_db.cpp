@@ -16,22 +16,22 @@
 #include <map>
 #include "Utils.h"
 #include "DB.h"
+
 using namespace std;
 
 void displayManu();
 void createTable(DB &db);
-string getNameOfFile();
 void insert(DB &db);
+string getNameOfFile(char fileAccess);
 
-
-
-std::map<string, DataType> acceptable_type {
+std::map<std::string, DataType> acceptable_type {
 	{"INT", DataType::INT},
 	{"VAR", DataType::VAR},
 	{"FLOAT", DataType::FLOAT},
 	{"TIME", DataType::TIME},
 	{"UNKNOWN", DataType::UNKNOWN},
 };
+
 
 int main() {
 
@@ -44,25 +44,30 @@ int main() {
 		if (choose == "b") {
 			createTable(*db);
 		} else if (choose == "c") {
-			string fn=getNameOfFile();
-			db->saveBDtoFile(fn);
-			(db->getTable())->printTable();
+			string fn=getNameOfFile('w');
+			if(!fn.empty()){
+				db->writaData(fn);
+			}
 		} else if (choose == "d") {
-			string fn=getNameOfFile();
-			db->readDBfromFile(fn);
-			(db->getTable())->printTable();
+			string fn=getNameOfFile('r');
+			if(!fn.empty()){
+				db->readData(fn);
+				db->printTable();
+			}
+			db->readData(fn);
+			db->printTable();
 		} else if (choose == "h") {
 			displayManu();
 		} else if (choose == "f") {
-			(db->getTable())->describeTable();
+			db->printTable();
 		} else if (choose == "i") {
 			insert(*db);
 		} else if (choose == "q") {
 			cout<<"QUIT"<<endl;
 		} else {
-			if (!(db->getTable())->checkIfListDataEmpty()) {
+			if (!db->empty()) {
 				SQL sql;
-				if(sql.readSQL(choose, (db->getTable())->getName())==true){
+				if(sql.readSQL(choose)==true){
 					if (sql.statement == 'I') {
 						sql.printAll();
 						db->insert(sql);
@@ -109,12 +114,11 @@ void createTable(DB &db) {
 
 	int n;
 	string name;
-
 	cout << "Set name of table" << endl;
 	cin >> name;
 	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 	cout << "how many field do you want to store in table" << endl;
-	cin >> n;
+	n=readIntger("");
 	cout << "creating tables...." << endl;
 	std::vector<std::pair <std::string, std::string>> values(n);
 	for (int i = 0; i < n; i++) {
@@ -131,36 +135,48 @@ void createTable(DB &db) {
 		std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 		values.at(i)= pair <string, string>(type, name);
 	}
-	(db.getTable())->createTable(name,values);
+	db.createTable(name,values);
 }
 
 
-string getNameOfFile(){
+string getNameOfFile(char fileAccess){
+
 	string filename;
 	cout << "Set name of the file" << endl;
 	cin >> filename;
 	cin.ignore(256, '\n');
+	file_status status = getStatusOfFile(filename);
+	cout<<"File name verification.."<<endl;
+	if(((fileAccess=='w') &&((status==file_status::NOT_EXIST)||(status==file_status::EXIST_AND_EMPTY)))||
+			((fileAccess=='r') && (status==file_status::EXIST_NOT_EMPTY))){
+		cout<<"File name ok"<<endl;
+	}	else{
+		cout<<"Incorrect file"<<endl;
+		filename.clear();
+	}
 	return filename;
 }
 
 void insert(DB &db) {
-	if ((db.getTable())->checkIfVecConfigEmpty() == false) {
+	if (db.empty()== false) {
 		cout << "How many rows you want to add" << endl;
 		int rows;
 		cin >> rows;
 		cin.ignore(256, '\n');
 		vector<std::pair<std::string, std::string>> expression;
+		std::vector<FieldConfig> vec_config =db.getFieldConfig();
 		string s_value;
 		for (int i = 0; i < rows; ++i) {
-				for (auto it = ((db.getTable())->getVec_config()).begin(); it != ((db.getTable())->getVec_config()).end(); ++it) {
+				SQL s {'I', 0, 0, db.getTableName()};
+				for (auto it = begin(vec_config); it != end(vec_config); ++it) {
 					cout<<"Set correct value of "<<(*it).getTypeString()<<" for field [" <<  (*it).getName() << "]: ";
 					cin>>s_value;
 					std::cin.ignore(256, '\n');
-					expression.push_back(std::pair<std::string, std::string>(s_value, ""));
+					s.expression.push_back(std::pair<std::string, std::string>(s_value, ""));
 				}
-				(db.getTable())->addRow(expression);
+				db.insert(s);
 		}
-		(db.getTable())->printTable();
+		db.printTable();
 	} else {
 		cout << "Create table before inserting sth" << endl;
 	}

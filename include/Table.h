@@ -16,27 +16,26 @@
 #include "FieldConfig.h"
 #include <memory>
 #include <iterator>
+#include <algorithm>
 
 class Table {
 	std::string name;
 	std::vector<FieldConfig> vec_config;
 	std::list<Record> list_data;
-	void addConfigField(const std::string &type, const std::string &name);
+
 
 public:
 	Table();
 	~Table();
 	std::string getName() const;
 	void setName(const std::string &pp);
-	void createTable(const std::string &f, const std::vector<std::pair <std::string, std::string>> &values);
 	void addRow(std::string s);
 	void addRow(const std::vector<std::pair<std::string, std::string>> & expression);
-	void describeTable();
-	void printTable();
-	void read_data(const Table &s, const std::string &filename);
-	void save_data(const Table &s, const  std::string &filename);
-	std::vector<FieldConfig> getVec_config() const;
-	std::list<Record> getList_data()const ;
+	void addConfigField(const std::string &type, const std::string &name);
+	bool describeTable();
+	//void printTable();
+	const std::vector<FieldConfig> getVec_config() const;
+	const std::list<Record> getList_data()const ;
 	void clearTable();
 	std::list<Record> findMatchingRow(const
 			std::vector<std::pair<std::string, std::string>> &v);
@@ -52,6 +51,8 @@ public:
 			const std::vector<std::pair<std::string, std::string>> &condition);
 	int updateAllFromDB(const std::vector<std::pair<std::string, std::string>> &update);
 
+	bool empty();
+	void printData();
 };
 
 #endif /* SRC_TABLE_H_ */

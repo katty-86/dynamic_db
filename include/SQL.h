@@ -15,13 +15,14 @@ struct SQL {
 	char statement;
 	bool flag_count:1;//=false;
 	bool flag_all:1;//=false;
+	std::string tablename;
 	std::vector<std::pair<std::string, std::string>> expression;
 	std::vector<std::pair<std::string, std::string>> where_condition;
 
-	SQL();
+	SQL(char s='0', bool flag_c=0, bool flag_al=0, std::string tablename="");
 	~SQL();
 	void printAll();
-	bool readSQL(  std::string str,  std::string name_of_table);
+	bool readSQL(  std::string str);
 	std::vector<std::pair<std::string, std::string>> buildPairVector(
 			std::string  str);
 	std::vector<std::pair<std::string, std::string>> buildStringVector(

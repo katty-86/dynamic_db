@@ -9,14 +9,19 @@
 
 int readIntger(std::string s) {
 	std::string value;
+	std::string statement ="Set correct value of integer ";
+	if(s!=""){
+		statement+="for field [ "+s+"]: ";
+	}
 	do {
-		std::cout << "Set correct value of integer for field [" << s << "]: ";
+		std::cout << statement;
 		std::cin >> value;
 		std::cin.ignore(256, '\n');
 	} while (value.find_first_not_of("0123456789") != std::string::npos);
 
 	return std::atoi(value.c_str());
 }
+
 
 std::string readString(std::string s) {
 	std::string value;
@@ -53,4 +58,23 @@ bool checkIfVar(std::string pp){
 bool checkIfFloat(std::string pp){
 	std::regex reg_float("[0-9]+\\.{1}[0-9]+(f|F)?");
 	return std::regex_match(pp, reg_float);
+}
+
+file_status getStatusOfFile(const std::string &filename){
+	std::ifstream f(filename.c_str());
+		if(f.good()){
+			if(f.peek()==std::ifstream::traits_type::eof()){
+				return file_status::EXIST_AND_EMPTY;
+			}
+			else{
+				return file_status::EXIST_NOT_EMPTY;
+			}
+			f.close();
+		}
+		else {
+			f.close();
+			return file_status::NOT_EXIST;
+		}
+
+
 }

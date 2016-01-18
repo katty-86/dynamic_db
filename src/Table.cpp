@@ -24,44 +24,36 @@ void Table::setName(const std::string &pp) {
 }
 
 void Table::addConfigField(const std::string &type, const std::string &name) {
-
 	std::shared_ptr<FieldConfig> fg = std::make_shared<FieldConfig>(name, type);
 	this->vec_config.push_back(*fg);
 
 }
 
-void Table::createTable(const std::string &f,
-		const std::vector<std::pair<std::string, std::string>> &values) {
-	if (this->getName() != "") {
-		this->clearTable();
+bool Table::empty(){
+	if (this->vec_config.empty() == false) {
+		return false;
 	}
-	this->name = f;
-	for (auto &i : values) {
-		addConfigField(i.first, i.second);
-	}
+	return true;
 }
-void Table::describeTable() {
+
+bool Table::describeTable() {
 	if (this->vec_config.empty() == false) {
 		std::cout << "*table = \"" << this->name << "\"\n";
 		for_each(begin(vec_config), end(vec_config), [](FieldConfig &fc){ std::cout <<fc<<" \n"; });
 		std::cout << std::endl;
+		return true;
 	} else {
 		std::cout << "Table does not exist " << std::endl;
+		return false;
 	}
 
 }
 
-void Table::printTable() {
-	if (this->vec_config.empty() == false) {
-		std::cout << "*table = \"" << this->name << "\"\n";
-		for_each(begin(vec_config), end(vec_config), [](FieldConfig &fc){ std::cout <<fc<<" "; });
-		std::cout << "\n";
-		for_each(begin(list_data), end(list_data), [](Record &r){ std::cout <<r<<" \n"; });
-		std::cout << std::endl;
-	} else {
-		std::cout << "Table does not exist" << std::endl;
+void Table::printData(){
+	if (this->list_data.empty()== false) {
+			for_each(begin(list_data), end(list_data), [](const Record &r){ std::cout <<r<<" \n"; });
+			std::cout << std::endl;
 	}
-
 }
 
 void Table::addRow(
@@ -85,11 +77,11 @@ void Table::addRow(std::string s) {
 	this->list_data.push_back(*r);
 }
 
-std::vector<FieldConfig> Table::getVec_config() const {
+const std::vector<FieldConfig> Table::getVec_config() const {
 	return this->vec_config;
 }
 
-std::list<Record> Table::getList_data() const {
+const std::list<Record> Table::getList_data() const {
 	return this->list_data;
 }
 
@@ -245,8 +237,11 @@ int Table::removeAllFromDB() {
 	this->list_data.clear();
 	return list_datasize;
 }
+/*
 std::list<std::string> Table::findMatchingRowAccordingExpression(
 		const std::vector<std::pair<std::string, std::string>> &e,
 		const std::vector<std::pair<std::string, std::string>> &v) {
-}
+}*/
+
+
 
