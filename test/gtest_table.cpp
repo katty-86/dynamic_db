@@ -4,7 +4,7 @@
 #include "Table.h"
 #include "FieldConfig.h"
 
-std::map<std::string, DataType> acceptable_type { { "INT", DataType::INT }, {
+/*std::map<std::string, DataType> acceptable_type { { "INT", DataType::INT }, {
 		"VAR", DataType::VAR }, { "FLOAT", DataType::FLOAT }, { "TIME",
 		DataType::TIME }, { "UNKNOWN", DataType::UNKNOWN }, };
 
@@ -30,7 +30,7 @@ protected:
 
 };
 
-TEST_F(CreateTableTest, CreateTable) {
+TEST_F(CreateTableTest, createTable) {
 
 	EXPECT_STREQ(t->getName().c_str(), "test");
 	//EXPECT_EQ(4, (t->getVec_config()).size());
@@ -52,3 +52,10 @@ TEST_F(CreateTableTest, CreateTable) {
 	EXPECT_STREQ(i.getTypeString().c_str(), "INT");
 
 }
+
+
+TEST_F(CreateTableTest, addRowToTable) {
+
+
+}
+*/

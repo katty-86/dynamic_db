@@ -28,7 +28,7 @@ TEST_F(RecordTest, addingRecordFromString) {
 	std::ostringstream oss;
 	EXPECT_TRUE(record->addRecord(vec_config, record_s));
 	oss << *(record);
-	EXPECT_STREQ(record_s.c_str(), (oss.str()).c_str());
+	EXPECT_STREQ(" 1; SSSS; 13.2; 1111111;", (oss.str()).c_str());
 	//record_s.clear();
 	record_s = " 11.3; SSSS; 13.2; 1111111;";
 	record.reset(new Record);
