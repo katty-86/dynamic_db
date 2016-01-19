@@ -21,17 +21,8 @@ using namespace std;
 
 void displayManu();
 void createTable(DB &db);
-void insert(DB &db);
+void insert(DB &db, string s);
 string getNameOfFile(char fileAccess);
-
-std::map<std::string, DataType> acceptable_type {
-	{"INT", DataType::INT},
-	{"VAR", DataType::VAR},
-	{"FLOAT", DataType::FLOAT},
-	{"TIME", DataType::TIME},
-	{"UNKNOWN", DataType::UNKNOWN},
-};
-
 
 int main() {
 
@@ -44,50 +35,70 @@ int main() {
 		if (choose == "b") {
 			createTable(*db);
 		} else if (choose == "c") {
-			string fn=getNameOfFile('w');
-			if(!fn.empty()){
-				db->writaData(fn);
+			cout << "Save table to file\n";
+			cout << "What table do you want to save" << endl;
+			string tablename;
+			cin >> tablename;
+			cin.ignore(256, '\n');
+			string fn = getNameOfFile('w');
+			if (!fn.empty()) {
+				cout
+						<< (db->writaData(tablename, fn) ?
+								"Writing ok" : "Writing not ok") << endl;
 			}
 		} else if (choose == "d") {
-			string fn=getNameOfFile('r');
-			if(!fn.empty()){
-				db->readData(fn);
-				db->printTable();
+			cout << "Read table from file" << endl;
+			string fn = getNameOfFile('r');
+			if (!fn.empty()) {
+				string tablename = db->readData(fn);
+				if (tablename != "") {
+					cout << "Reading ok" << endl;
+					db->printTable(tablename);
+				} else {
+					cout << "Reading not ok" << endl;
+				}
+
 			}
-			db->readData(fn);
-			db->printTable();
 		} else if (choose == "h") {
 			displayManu();
 		} else if (choose == "f") {
-			db->printTable();
+			cout << "Describe table" << endl;
+			cout << "What table do you want to describe" << endl;
+			string tablename;
+			db->printTable(tablename);
 		} else if (choose == "i") {
-			insert(*db);
+			cout << "Insert data to table" << endl;
+			cout << "Write name of table" << endl;
+			string tablename;
+			cin >> tablename;
+			cin.ignore(256, '\n');
+			insert(*db, tablename);
 		} else if (choose == "q") {
-			cout<<"QUIT"<<endl;
+			cout << "QUIT" << endl;
 		} else {
-			if (!db->empty()) {
-				SQL sql;
-				if(sql.readSQL(choose)==true){
-					if (sql.statement == 'I') {
-						sql.printAll();
-						db->insert(sql);
-					} else if (sql.statement == 'S') {
-						//sql.printAll();
-						db->select(sql);
-					} else if (sql.statement == 'D') {
-						sql.printAll();
-						db->deleteRow( sql);
-					} else if (sql.statement == 'U') {
-						sql.printAll();
-						db->updateRow(sql);
-					}
-				}
-				else {
-					cout << "Main: unsupported operation" << endl;
+			//if (!db->empty()) {
+			SQL sql;
+			if (sql.readSQL(choose) == true) {
+				sql.printAll();
+				if (sql.statement == 'I') {
+					sql.printAll();
+					db->insert(sql);
+				} else if (sql.statement == 'S') {
+					//sql.printAll();
+					db->select(sql);
+				} else if (sql.statement == 'D') {
+					sql.printAll();
+					db->deleteRow(sql);
+				} else if (sql.statement == 'U') {
+					sql.printAll();
+					db->updateRow(sql);
 				}
 			} else {
-				cout << "Main: list is empty -task is not possible" << endl;
+				cout << "Main: unsupported operation" << endl;
 			}
+			/*} else {
+			 cout << "Main: list is empty -task is not possible" << endl;
+			 }*/
 
 		}
 	} while (choose != "q");
@@ -109,7 +120,6 @@ void displayManu() {
 	cout << "\n\n or write dml statement for existing table \n";
 }
 
-
 void createTable(DB &db) {
 
 	int n;
@@ -118,9 +128,9 @@ void createTable(DB &db) {
 	cin >> name;
 	std::transform(name.begin(), name.end(), name.begin(), ::toupper);
 	cout << "how many field do you want to store in table" << endl;
-	n=readIntger("");
+	n = readIntger("");
 	cout << "creating tables...." << endl;
-	std::vector<std::pair <std::string, std::string>> values(n);
+	std::vector<std::pair<std::string, std::string>> values(n);
 	for (int i = 0; i < n; i++) {
 		//checking function for type
 		string name, type;
@@ -133,50 +143,58 @@ void createTable(DB &db) {
 		cin >> name;
 		cin.ignore(256, '\n');
 		std::transform(name.begin(), name.end(), name.begin(), ::toupper);
-		values.at(i)= pair <string, string>(type, name);
+		values.at(i) = pair<string, string>(type, name);
 	}
-	db.createTable(name,values);
+	db.createTable(name, values);
 }
 
-
-string getNameOfFile(char fileAccess){
+string getNameOfFile(char fileAccess) {
 
 	string filename;
 	cout << "Set name of the file" << endl;
 	cin >> filename;
 	cin.ignore(256, '\n');
 	file_status status = getStatusOfFile(filename);
-	cout<<"File name verification.."<<endl;
-	if(((fileAccess=='w') &&((status==file_status::NOT_EXIST)||(status==file_status::EXIST_AND_EMPTY)))||
-			((fileAccess=='r') && (status==file_status::EXIST_NOT_EMPTY))){
-		cout<<"File name ok"<<endl;
-	}	else{
-		cout<<"Incorrect file"<<endl;
+	cout << "File name verification.." << endl;
+	if (((fileAccess == 'w')
+			&& ((status == file_status::NOT_EXIST)
+					|| (status == file_status::EXIST_AND_EMPTY)))
+			|| ((fileAccess == 'r') && (status == file_status::EXIST_NOT_EMPTY))) {
+		cout << "File name ok" << endl;
+	} else {
+		cout << "Incorrect file" << endl;
 		filename.clear();
 	}
 	return filename;
 }
-
-void insert(DB &db) {
-	if (db.empty()== false) {
+/*
+ * Adding verification
+ * */
+void insert(DB &db, string str) {
+	if (db.empty(str) == false) {
 		cout << "How many rows you want to add" << endl;
 		int rows;
 		cin >> rows;
 		cin.ignore(256, '\n');
 		vector<std::pair<std::string, std::string>> expression;
-		std::vector<FieldConfig> vec_config =db.getFieldConfig();
+		std::vector<FieldConfig> vec_config = db.getFieldConfig(str);
 		string s_value;
 		for (int i = 0; i < rows; ++i) {
-				SQL s {'I', 0, 0, db.getTableName()};
-				for (auto it = begin(vec_config); it != end(vec_config); ++it) {
-					cout<<"Set correct value of "<<(*it).getTypeString()<<" for field [" <<  (*it).getName() << "]: ";
-					cin>>s_value;
+			SQL s { 'I', 0, 0, str };
+			for (auto it = begin(vec_config); it != end(vec_config); ++it) {
+				do {
+					cout << "Set correct value of " << (*it).getTypeString()
+							<< " for field [" << (*it).getName() << "]: ";
+					cin >> s_value;
 					std::cin.ignore(256, '\n');
-					s.expression.push_back(std::pair<std::string, std::string>(s_value, ""));
-				}
-				db.insert(s);
+				} while (!verifyStringIsCorrectType((*it).getTypeString(),
+						s_value));
+				s.expression.push_back(
+						std::pair<std::string, std::string>(s_value, ""));
+			}
+			db.insert(s);
 		}
-		db.printTable();
+		db.printTable(str);
 	} else {
 		cout << "Create table before inserting sth" << endl;
 	}

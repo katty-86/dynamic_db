@@ -9,9 +9,9 @@
 
 int readIntger(std::string s) {
 	std::string value;
-	std::string statement ="Set correct value of integer ";
-	if(s!=""){
-		statement+="for field [ "+s+"]: ";
+	std::string statement = "Set correct value of integer ";
+	if (s != "") {
+		statement += "for field [ " + s + "]: ";
 	}
 	do {
 		std::cout << statement;
@@ -21,7 +21,6 @@ int readIntger(std::string s) {
 
 	return std::atoi(value.c_str());
 }
-
 
 std::string readString(std::string s) {
 	std::string value;
@@ -44,37 +43,50 @@ float readFloat(std::string s) {
 	return std::stof(value.c_str());
 }
 
-bool checkIfInt(std::string i){
+bool checkIfInt(std::string i) {
 	std::regex reg_int("[[:s:]]*[0-9]+");
 	return std::regex_match(i, reg_int);
 }
-bool checkIfVar(std::string pp){
+bool checkIfVar(std::string pp) {
 	transform(pp.begin(), pp.end(), pp.begin(), ::toupper);
-	if(pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ") == std::string::npos){
-			return true;
-		}
-		return false;
+	if (pp.find_first_not_of("ABCDEFGHIJKLMNOPRSTUVWXYZQ ")
+			== std::string::npos) {
+		return true;
+	}
+	return false;
 }
-bool checkIfFloat(std::string pp){
+bool checkIfFloat(std::string pp) {
 	std::regex reg_float("[0-9]+\\.{1}[0-9]+(f|F)?");
 	return std::regex_match(pp, reg_float);
 }
 
-file_status getStatusOfFile(const std::string &filename){
+file_status getStatusOfFile(const std::string &filename) {
 	std::ifstream f(filename.c_str());
-		if(f.good()){
-			if(f.peek()==std::ifstream::traits_type::eof()){
-				return file_status::EXIST_AND_EMPTY;
-			}
-			else{
-				return file_status::EXIST_NOT_EMPTY;
-			}
-			f.close();
+	if (f.good()) {
+		if (f.peek() == std::ifstream::traits_type::eof()) {
+			return file_status::EXIST_AND_EMPTY;
+		} else {
+			return file_status::EXIST_NOT_EMPTY;
 		}
-		else {
-			f.close();
-			return file_status::NOT_EXIST;
-		}
+		f.close();
+	} else {
+		f.close();
+		return file_status::NOT_EXIST;
+	}
 
+}
 
+bool verifyStringIsCorrectType(std::string type, std::string s_value) {
+	DataType dt = acceptable_type[type];
+	if (dt == DataType::INT) {
+		return checkIfInt(s_value);
+	} else if (dt == DataType::VAR) {
+		return checkIfVar(s_value);
+	} else if (dt == DataType::FLOAT) {
+		return checkIfFloat(s_value);
+	} else if (dt == DataType::TIME) {
+		return checkIfInt(s_value);
+	} else {
+		return false;
+	}
 }

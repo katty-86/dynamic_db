@@ -15,31 +15,35 @@
 #include "SQL.h"
 using namespace std;
 
-
 class DB {
 	//Todo only for one table -> change to map  map<string, Table> db
 	std::map<std::string, shared_ptr<Table>> tables;
 	shared_ptr<Table> t;
+	//function for map
+	bool findIfTableExist(string tablename);
+	bool addTableToDB(Table &table);
+	bool deleteTableFromDB(std::string tablename);
+
 public:
 	DB();
 	~DB();
-//	bool saveBDtoFile(const string &filename);
-//	bool readDBfromFile(const string &filename);
-	void insert( SQL &s);
-	void select( SQL &s);
-	void deleteRow( SQL &s);
-	void updateRow( SQL &s);
-	void createTable(const std::string &f, const std::vector<std::pair <std::string, std::string>> &values);
-	void printTable();
-	std::string getTableName()const;
-	bool empty();
-	const std::vector<FieldConfig> getFieldConfig();
-	bool writaData( const std::string &filename);
-	bool readData(const std::string &filename);
 
+	/*
+	 * Function must be changed adding iterator inside function!!!
+	 * */
+	bool insert(SQL &s);
+	bool select(SQL &s);
+	bool deleteRow(SQL &s);
+	bool updateRow(SQL &s);
+	bool createTable(const std::string &f,
+			const std::vector<std::pair<std::string, std::string>> &values);
+	bool printTable(const string &tablename);
+	//std::string getTableName(const string &tablename)const;
+	bool empty(const string &tablename);
+	const std::vector<FieldConfig> getFieldConfig(const string &tablename);
+	bool writaData(const string &tablename, const std::string &filename);
+	std::string readData(const std::string &filename);
 
 };
-
-
 
 #endif /* SRC_DB_H_ */
